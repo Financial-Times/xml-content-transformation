@@ -1,0 +1,267 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.ft.bodyprocessing</groupId>
+	<artifactId>body-processing</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>${project.artifactId}</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<ft-unifiedContentModel.version>0.24.0</ft-unifiedContentModel.version>
+		<commons-lang.version>2.6</commons-lang.version>
+		<guava.version>r09</guava.version>
+		<hamcrest.version>1.1</hamcrest.version>
+		<junit.version>4.8.2</junit.version>
+		<mockito.version>1.8.5</mockito.version>
+		<slf4j.version>1.6.4</slf4j.version>
+		<spring.version>3.1.1.RELEASE</spring.version>
+		<stax2api.version>3.1.1</stax2api.version>
+		<woodstox.version>4.2.0</woodstox.version>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.16</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>2.16</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.4.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.3.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>1.3.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-shade-plugin</artifactId>
+					<version>1.6</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+								<!--  TODO change to 3.0.5 -->
+									<version>[3.0.4,4.0)</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+								<!--  TODO upgrade to java 1.7 -->
+									<version>[1.6,1.8)</version>
+								</requireJavaVersion>
+								<requirePluginVersions>
+									<message>Best Practice is to always define versions for maven
+										plugins!</message>
+									<banLatest>true</banLatest>
+									<banRelease>true</banRelease>
+									<banSnapshots>true</banSnapshots>
+									<banTimestamps>true</banTimestamps>
+									<phases>clean,deploy,site</phases>
+								</requirePluginVersions>
+								<requireReleaseDeps>
+									<message>Depending on Snapshot Versions is not allowed!</message>
+									<onlyWhenRelease>false</onlyWhenRelease>
+									<failWhenParentIsSnapshot>false</failWhenParentIsSnapshot>
+								</requireReleaseDeps>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Unified Content Model -->
+			<dependency>
+				<groupId>com.ft.unifiedContentModel</groupId>
+				<artifactId>ft-unifiedContentModel-model</artifactId>
+				<version>${ft-unifiedContentModel.version}</version>
+			</dependency>
+
+			<!-- Spring -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-core</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<!-- StAX Parsing -->
+			<dependency>
+				<groupId>org.codehaus.woodstox</groupId>
+				<artifactId>stax2-api</artifactId>
+				<version>${stax2api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.codehaus.woodstox</groupId>
+				<artifactId>woodstox-core-lgpl</artifactId>
+				<version>${woodstox.version}</version>
+			</dependency>
+
+			<!-- Utilities -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>commons-lang</groupId>
+				<artifactId>commons-lang</artifactId>
+				<version>${commons-lang.version}</version>
+			</dependency>
+
+
+			<!-- logging -->
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
+			<!--testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>${mockito.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>${hamcrest.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.ft.unifiedContentModel</groupId>
+			<artifactId>ft-unifiedContentModel-model</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>
+
+
+		<!-- stax parsing -->
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>stax2-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.woodstox</groupId>
+			<artifactId>woodstox-core-lgpl</artifactId>
+		</dependency>
+
+		<!-- testing -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
