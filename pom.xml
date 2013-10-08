@@ -104,12 +104,10 @@
 						<configuration>
 							<rules>
 								<requireMavenVersion>
-								<!--  TODO change to 3.0.5 -->
-									<version>[3.0.4,4.0)</version>
+									<version>[3.0.5,4.0)</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
-								<!--  TODO upgrade to java 1.7 -->
-									<version>[1.6,1.8)</version>
+									<version>[1.7,1.8)</version>
 								</requireJavaVersion>
 								<requirePluginVersions>
 									<message>Best Practice is to always define versions for maven
