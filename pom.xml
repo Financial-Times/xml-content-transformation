@@ -10,14 +10,12 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<ft-unifiedContentModel.version>0.24.0</ft-unifiedContentModel.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<guava.version>r09</guava.version>
 		<hamcrest.version>1.1</hamcrest.version>
 		<junit.version>4.8.2</junit.version>
 		<mockito.version>1.8.5</mockito.version>
 		<slf4j.version>1.6.4</slf4j.version>
-		<spring.version>3.1.1.RELEASE</spring.version>
 		<stax2api.version>3.1.1</stax2api.version>
 		<woodstox.version>4.2.0</woodstox.version>
 	</properties>
@@ -192,20 +190,6 @@
 	<dependencyManagement>
 		<dependencies>
 
-			<!-- Unified Content Model -->
-			<dependency>
-				<groupId>com.ft.unifiedContentModel</groupId>
-				<artifactId>ft-unifiedContentModel-model</artifactId>
-				<version>${ft-unifiedContentModel.version}</version>
-			</dependency>
-
-			<!-- Spring -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
 			<!-- StAX Parsing -->
 			<dependency>
 				<groupId>org.codehaus.woodstox</groupId>
@@ -246,7 +230,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
+				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
 			</dependency>
 			<dependency>
@@ -260,14 +244,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.ft.unifiedContentModel</groupId>
-			<artifactId>ft-unifiedContentModel-model</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 		</dependency>
@@ -275,11 +251,10 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>commons-lang</groupId>
-			<artifactId>commons-lang</artifactId>
-		</dependency>
-
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
 
 		<!-- stax parsing -->
 		<dependency>
@@ -299,7 +274,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
+			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

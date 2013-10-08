@@ -1,6 +1,6 @@
 package com.ft.bodyprocessing;
 
-import static org.springframework.util.Assert.notNull;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ public class BodyProcessorChain implements BodyProcessor {
 	private List<BodyProcessor> bodyProcessors;
 
 	public BodyProcessorChain(List<BodyProcessor> bodyProcessors) {
-		notNull(bodyProcessors, "bodyProcessors cannot be null");
+        checkArgument(bodyProcessors != null, "bodyProcessors cannot be null");
 		this.bodyProcessors = bodyProcessors;
 	}
 

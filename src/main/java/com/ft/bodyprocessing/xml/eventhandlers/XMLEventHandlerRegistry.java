@@ -1,7 +1,6 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
-import static org.springframework.util.Assert.notNull;
-import static org.springframework.util.Assert.notEmpty;
+import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -113,7 +112,8 @@ public class XMLEventHandlerRegistry {
 
 	public void registerStartAndEndElementEventHandler(XMLEventHandler eventHandler,
 			String... names) {
-		notNull(eventHandler, "eventHandler cannot be null");
+        final String s = "eventHandler cannot be null";
+        notNull(eventHandler, s);
 		notNull(names, "names cannot be null");
 		notEmpty(names, "names cannot be empty");
 		for(String name: names) {
@@ -122,5 +122,13 @@ public class XMLEventHandlerRegistry {
 		}
 		
 	}
+
+    private void notEmpty(String[] names, String message) {
+        checkArgument(names!=null && names.length>0, message);
+    }
+
+    private void notNull(Object value, String message) {
+        checkArgument(value!=null, message);
+    }
 
 }

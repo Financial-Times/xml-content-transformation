@@ -1,6 +1,7 @@
 package com.ft.bodyprocessing.xml;
 
-import static org.springframework.util.Assert.notNull;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
@@ -8,6 +9,7 @@ import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.XMLEvent;
 
+import com.google.common.base.Preconditions;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLOutputFactory2;
 
@@ -30,15 +32,15 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
     public StAXTransformingBodyProcessor(XMLEventReaderFactory xmlEventReaderFactory,
             XMLEventHandlerRegistry eventHandlerRegistry, BodyWriterFactory bodyWriterFactory) {
 
-        notNull(xmlEventReaderFactory, "xmlEventReaderFactory cannot be null");
-        notNull(eventHandlerRegistry, "eventHandlerRegistry cannot be null");
-        notNull(bodyWriterFactory, "bodyWriterFactory cannot be null");
+        checkArgument(xmlEventReaderFactory!=null, "xmlEventReaderFactory cannot be null");
+        checkArgument(eventHandlerRegistry!=null, "eventHandlerRegistry cannot be null");
+        checkArgument(bodyWriterFactory!=null, "bodyWriterFactory cannot be null");
 
-        this.xmlEventReaderFactory = xmlEventReaderFactory;
+        this.xmlEventReaderFactory =  xmlEventReaderFactory;
         this.eventHandlerRegistry = eventHandlerRegistry;
         this.bodyWriterFactory = bodyWriterFactory;
     }
-    
+
     public StAXTransformingBodyProcessor(XMLEventHandlerRegistry eventHandlerRegistry) {
         this(createXMLEventReaderFactory(), eventHandlerRegistry, createBodyWriterFactory());
     }
