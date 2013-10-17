@@ -42,7 +42,7 @@ public class BaseXMLEventHandler implements XMLEventHandler {
 	}
 
 	@Override
-	public void handleComment(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) 
+	public void handleCommentEvent(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) 
 			throws XMLStreamException {
 		// By default, do nothing
 	}
@@ -73,35 +73,6 @@ public class BaseXMLEventHandler implements XMLEventHandler {
 					}
 					count--;
 				}
-			}
-		}
-	}
-	
-	protected void retainUntilMatchingEndTag(String nameToMatch, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
-		int count = 0;
-		while (xmlEventReader.hasNext()) {
-			XMLEvent event = xmlEventReader.nextEvent();
-			if (event.isStartElement()) {
-				StartElement newStartElement = event.asStartElement();
-				if (nameToMatch.equals(newStartElement.getName().getLocalPart())) {
-					count++;
-				}
-				eventWriter.writeStartTag(newStartElement.getName().getLocalPart(), getValidAttributesAndValues(newStartElement));
-			}
-			if (event.isEndElement()) {
-				EndElement endElement = event.asEndElement();
-				String localName = endElement.getName().getLocalPart();
-				if (nameToMatch.equals(localName)) {
-					if (count == 0) {
-						return;
-					}
-					count--;
-				}
-				eventWriter.writeEndTag(localName);
-			}
-			if(event.isCharacters()){
-				Characters charactersElement = event.asCharacters();
-				eventWriter.write(charactersElement.getData());
 			}
 		}
 	}

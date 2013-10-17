@@ -29,7 +29,7 @@ public class StripXMLEventHandler extends BaseXMLEventHandler {
 	}
 	
 	@Override
-	public void handleComment(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
+	public void handleCommentEvent(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
 		// do nothing
 	}
 	

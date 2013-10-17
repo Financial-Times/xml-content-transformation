@@ -19,7 +19,7 @@ public interface XMLEventHandler {
 	public void handleCharactersEvent(Characters event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException;	
 	public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException;
 	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException;
-	public void handleComment(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException;
+	public void handleCommentEvent(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException;
 	public void handleEntityReferenceEvent(EntityReference event, XMLEventReader xmlEventReader, BodyWriter bodyWriter) throws XMLStreamException;
 
 }

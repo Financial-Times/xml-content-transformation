@@ -20,4 +20,6 @@ public interface BodyWriter {
 	void flush();
 	
     boolean isPTagCurrentlyOpen();
+
+	void writeComment(String text);
 }

@@ -3,18 +3,22 @@ package com.ft.bodyprocessing.xml.eventhandlers;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.ft.bodyprocessing.BodyProcessingContext;
-import com.ft.bodyprocessing.writer.BodyWriter;
-import com.google.common.collect.ImmutableMap;
 import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
+
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.ft.bodyprocessing.BodyProcessingContext;
+import com.ft.bodyprocessing.writer.BodyWriter;
+import com.google.common.collect.ImmutableMap;
 
 @RunWith(value=MockitoJUnitRunner.class)
 public class RetainXMLEventHandlerTest extends BaseXMLEventHandlerTest {
@@ -54,6 +58,27 @@ public class RetainXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 		EndElement endElement = getEndElement("a");
 		eventHandler.handleEndElementEvent(endElement, mockXmlEventReader, eventWriter);
 		verify(eventWriter).writeEndTag(endElement.getName().getLocalPart());
+	}
+	
+	@Test
+	public void charactersShouldBeOutput() throws Exception {
+		Characters characters = getCharacters("characters");
+		eventHandler.handleCharactersEvent(characters, mockXmlEventReader, eventWriter);
+		verify(eventWriter).write(characters.getData());
+	}
+	
+	@Test
+	public void commentShouldBeOutput() throws Exception {
+		Comment comment = getComment("comment text");
+		eventHandler.handleCommentEvent(comment, mockXmlEventReader, eventWriter);
+		verify(eventWriter).writeComment(comment.getText());
+	}
+		
+	@Test
+	public void entityReferenceShouldBeOutput() throws Exception {
+		EntityReference entityReference = getEntityReference("someEntity");
+		eventHandler.handleEntityReferenceEvent(entityReference, mockXmlEventReader, eventWriter);
+		verify(eventWriter).writeEntityReference(entityReference.getName());
 	}
 }
 

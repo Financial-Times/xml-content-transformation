@@ -5,6 +5,7 @@ import com.ft.bodyprocessing.writer.BodyWriter;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
@@ -33,6 +34,12 @@ public class RetainXMLEventHandler extends BaseXMLEventHandler {
 	public void handleEntityReferenceEvent(EntityReference event, XMLEventReader xmlEventReader, BodyWriter eventWriter)
 			throws XMLStreamException {
 		eventWriter.writeEntityReference(event.getName());
+	}
+	
+	@Override
+	public void handleCommentEvent(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) 
+			throws XMLStreamException {
+		eventWriter.writeComment(event.getText());
 	}
 	
 }

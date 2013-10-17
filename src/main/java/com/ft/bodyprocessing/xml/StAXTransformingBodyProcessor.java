@@ -25,24 +25,13 @@ import com.ft.bodyprocessing.xml.eventhandlers.XMLEventHandlerRegistry;
 
 public class StAXTransformingBodyProcessor implements BodyProcessor {
 
-    private BodyWriterFactory bodyWriterFactory;
+    private BodyWriterFactory bodyWriterFactory = new HTML5VoidElementHandlingXMLBodyWriterFactory((XMLOutputFactory2) XMLOutputFactory2.newInstance());
     private XMLEventHandlerRegistry eventHandlerRegistry;
-    private XMLEventReaderFactory xmlEventReaderFactory;
-
-    public StAXTransformingBodyProcessor(XMLEventReaderFactory xmlEventReaderFactory,
-            XMLEventHandlerRegistry eventHandlerRegistry, BodyWriterFactory bodyWriterFactory) {
-
-        checkArgument(xmlEventReaderFactory!=null, "xmlEventReaderFactory cannot be null");
-        checkArgument(eventHandlerRegistry!=null, "eventHandlerRegistry cannot be null");
-        checkArgument(bodyWriterFactory!=null, "bodyWriterFactory cannot be null");
-
-        this.xmlEventReaderFactory =  xmlEventReaderFactory;
-        this.eventHandlerRegistry = eventHandlerRegistry;
-        this.bodyWriterFactory = bodyWriterFactory;
-    }
+    private XMLEventReaderFactory xmlEventReaderFactory = new XMLEventReaderFactory((XMLInputFactory2) XMLInputFactory2.newInstance());
 
     public StAXTransformingBodyProcessor(XMLEventHandlerRegistry eventHandlerRegistry) {
-        this(createXMLEventReaderFactory(), eventHandlerRegistry, createBodyWriterFactory());
+    	checkArgument(eventHandlerRegistry!=null, "eventHandlerRegistry cannot be null");
+        this.eventHandlerRegistry = eventHandlerRegistry;
     }
 
     @Override
@@ -104,7 +93,7 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
             eventHandler.handleCharactersEvent(event.asCharacters(), xmlEventReader, bodyWriter);
         } else if (event.getEventType() == XMLEvent.COMMENT){
         	eventHandler = eventHandlerRegistry.getEventHandler((Comment)event);
-        	eventHandler.handleComment((Comment)event, xmlEventReader, bodyWriter);
+        	eventHandler.handleCommentEvent((Comment)event, xmlEventReader, bodyWriter);
     	} else if (event.getEventType() == XMLEvent.ENTITY_REFERENCE) {
     		eventHandler = eventHandlerRegistry.getEventHandler((EntityReference) event);
     		eventHandler.handleEntityReferenceEvent((EntityReference) event, xmlEventReader, bodyWriter);
@@ -112,14 +101,6 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
             eventHandler = eventHandlerRegistry.getEventHandler(event);
             eventHandler.handleEvent(event, xmlEventReader, bodyWriter);
         }
-    }
-
-    private static BodyWriterFactory createBodyWriterFactory() {
-        return new HTML5VoidElementHandlingXMLBodyWriterFactory((XMLOutputFactory2) XMLOutputFactory2.newInstance());
-    }
-
-    private static XMLEventReaderFactory createXMLEventReaderFactory() {
-        return new XMLEventReaderFactory((XMLInputFactory2) XMLInputFactory2.newInstance());
     }
     
 

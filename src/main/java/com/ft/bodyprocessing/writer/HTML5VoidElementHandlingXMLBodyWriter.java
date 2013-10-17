@@ -126,12 +126,21 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 		}
 	}
 
+	@Override
+	public void writeComment(String text) {
+		try {
+			xmlStreamWriter2.writeComment(text);
+		} catch (XMLStreamException e) {
+			throw new BodyProcessingException(e);
+		}	
+	}
+
     @Override
 	public String asString() {
 	    try {
             xmlStreamWriter2.writeEndElement();
         } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
+        	throw new BodyProcessingException(e);
         }
 	    this.flush();
 	    
