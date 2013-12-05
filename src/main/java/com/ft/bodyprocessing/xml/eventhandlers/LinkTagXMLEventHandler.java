@@ -19,11 +19,16 @@ public class LinkTagXMLEventHandler extends BaseXMLEventHandler {
 
 	private static final String A_TAG_NAME = "a";
 	private static final QName HREF_ATTRIBUTE = new QName("href");
-	private static final List<QName> ATTRIBUTES = asList(new QName("title"), new QName("alt"), new QName("name"));
+	private static final List<QName> ATTRIBUTES = asList(new QName("title"), new QName("alt"));
+	
+	private int openATagCount = 0; // required because we don't output an <a> tag that has no href
 
 	@Override
 	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
-		eventWriter.writeEndTag(event.getName().getLocalPart());
+		if (openATagCount > 0) { // if we wrote out a start tag, close it
+			eventWriter.writeEndTag(event.getName().getLocalPart());
+			openATagCount--;
+		}
 	}
 
 	@Override
@@ -32,16 +37,17 @@ public class LinkTagXMLEventHandler extends BaseXMLEventHandler {
 		if (isLink(event)) {
 			Attribute hrefAttribute = event.getAttributeByName(HREF_ATTRIBUTE);
 			Map<String,String> validAttributesAndValues = new HashMap<String,String>();
-			if (hrefAttribute != null) {
+			if (hrefAttribute != null && !hrefAttribute.getValue().startsWith("#")) {
 				validAttributesAndValues.put(HREF_ATTRIBUTE.getLocalPart(), encodeHref(hrefAttribute.getValue()));
-			}
-			for (QName attributeName: ATTRIBUTES) {
-				Attribute attribute = event.getAttributeByName(attributeName);
-				if (attribute != null) {
-					validAttributesAndValues.put(attributeName.getLocalPart(), attribute.getValue());
+				for (QName attributeName: ATTRIBUTES) {
+					Attribute attribute = event.getAttributeByName(attributeName);
+					if (attribute != null) {
+						validAttributesAndValues.put(attributeName.getLocalPart(), attribute.getValue());
+					}
 				}
+				eventWriter.writeStartTag(event.getName().getLocalPart(), validAttributesAndValues);
+				openATagCount++;
 			}
-			eventWriter.writeStartTag(event.getName().getLocalPart(), validAttributesAndValues);
 		} else {
 	        throw new XMLStreamException("event must correspond to" + A_TAG_NAME  +" tag");
 		}
