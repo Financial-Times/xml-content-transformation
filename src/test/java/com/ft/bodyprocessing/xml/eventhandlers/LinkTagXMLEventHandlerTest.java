@@ -63,20 +63,4 @@ public class LinkTagXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 		ImmutableMap<String,String> expectedAttributesMap = ImmutableMap.of("href", "value");	
 		verify(eventWriter).writeStartTag(startElement.getName().getLocalPart(), expectedAttributesMap);
 	}
-	
-	@Test
-	public void shouldSkipTagIfNoHrefAttribute() throws Exception {
-		ImmutableMap<String,String> attributesMap = ImmutableMap.of("title", "value");
-		StartElement startElement = getStartElementWithAttributes("a", attributesMap);
-		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
-		verifyZeroInteractions(mockXmlEventReader, eventWriter);
-	}
-	
-	@Test
-	public void shouldSkipTagIfHrefAttributeIsAnchor() throws Exception {
-		ImmutableMap<String,String> attributesMap = ImmutableMap.of("href", "#value");
-		StartElement startElement = getStartElementWithAttributes("a", attributesMap);
-		eventHandler.handleStartElementEvent(startElement, mockXmlEventReader, eventWriter, mockBodyProcessingContext);
-		verifyZeroInteractions(mockXmlEventReader, eventWriter);
-	}
 }
