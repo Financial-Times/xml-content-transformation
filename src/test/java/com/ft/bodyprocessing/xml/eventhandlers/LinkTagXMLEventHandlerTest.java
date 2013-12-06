@@ -28,7 +28,7 @@ public class LinkTagXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 	
 	@Before
 	public void setup() {
-		eventHandler = new LinkTagXMLEventHandler();
+		eventHandler = new LinkTagXMLEventHandler("title", "alt");
 	}
 	
 	@Test

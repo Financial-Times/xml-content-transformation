@@ -2,6 +2,7 @@ package com.ft.bodyprocessing.xml.eventhandlers;
 
 import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.writer.BodyWriter;
+import com.google.common.collect.Lists;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -9,6 +10,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +22,14 @@ public class LinkTagXMLEventHandler extends BaseXMLEventHandler {
 
 	private static final String A_TAG_NAME = "a";
 	private static final QName HREF_ATTRIBUTE = new QName("href");
-	private static final List<QName> ATTRIBUTES = asList(new QName("title"), new QName("alt"));
+	private static List<QName> validAttributes;
+
+	public LinkTagXMLEventHandler(String... validAttributes) {
+		this.validAttributes = Lists.newArrayList();
+		for(String name: validAttributes) {
+			this.validAttributes.add(new QName(name.toLowerCase()));
+		}
+	}
 
 	@Override
 	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
@@ -34,7 +44,7 @@ public class LinkTagXMLEventHandler extends BaseXMLEventHandler {
 			Map<String,String> validAttributesAndValues = new HashMap<String,String>();
 			if (hrefAttribute != null) {
 				validAttributesAndValues.put(HREF_ATTRIBUTE.getLocalPart(), encodeHref(hrefAttribute.getValue()));
-				for (QName attributeName: ATTRIBUTES) {
+				for (QName attributeName: validAttributes) {
 					Attribute attribute = event.getAttributeByName(attributeName);
 					if (attribute != null) {
 						validAttributesAndValues.put(attributeName.getLocalPart(), attribute.getValue());
