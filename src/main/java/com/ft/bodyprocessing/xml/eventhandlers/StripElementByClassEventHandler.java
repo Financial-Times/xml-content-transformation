@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import java.util.Arrays;
 import java.util.List;
@@ -43,6 +44,10 @@ public class StripElementByClassEventHandler extends BaseXMLEventHandler {
 
 	}
 
+	@Override
+	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException {
+		fallbackHandler.handleEndElementEvent(event,xmlEventReader,eventWriter);
+	}
 
 	private boolean isTargetedClass(StartElement event) {
 

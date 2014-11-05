@@ -10,8 +10,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Comment;
-import javax.xml.stream.events.EntityReference;
+import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
 import java.util.Collections;
@@ -21,7 +20,6 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StripElementByClassEventHandlerTest extends BaseXMLEventHandlerTest {
@@ -55,6 +53,13 @@ public class StripElementByClassEventHandlerTest extends BaseXMLEventHandlerTest
 		verify(mockFallbackHandler,times(1)).handleStartElementEvent(any(StartElement.class),eq(mockXmlEventReader),eq(eventWriter), eq(mockBodyProcessingContext));
 	}
 
+	@Test
+	public void shouldAlwaysDelegateEndElement() throws XMLStreamException {
+		eventHandler.handleEndElementEvent(getEndElement("div"),mockXmlEventReader,eventWriter);
+
+		verify(mockFallbackHandler).handleEndElementEvent(any(EndElement.class),eq(mockXmlEventReader),eq(eventWriter));
+	}
+
 
 	@Test(expected = IllegalArgumentException.class)
 	public void shouldFailIfTargetedClassIsNull() {
@@ -65,6 +70,7 @@ public class StripElementByClassEventHandlerTest extends BaseXMLEventHandlerTest
 	public void shouldFailIfTargetedClassIsEmpty() {
 		eventHandler = new StripElementByClassEventHandler("",mockFallbackHandler);
 	}
+
 
 	private StartElement targetedElementEvent() {
 		return getStartElementWithAttributes("div", Collections.singletonMap("class", "morevideo"));
