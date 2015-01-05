@@ -4,8 +4,10 @@ import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.writer.BodyWriter;
 import com.google.common.collect.Maps;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
@@ -78,7 +80,7 @@ public class BaseXMLEventHandler implements XMLEventHandler {
 	}
 	
 	protected Map<String,String> getValidAttributesAndValues(StartElement event) {
-		Map<String,String> validAttributesAndValues = Maps.newHashMap();
+		LinkedHashMap<String,String> validAttributesAndValues = Maps.newLinkedHashMap();
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> actualAttributesIterator = event.getAttributes();
 		while (actualAttributesIterator.hasNext()) {
@@ -90,7 +92,7 @@ public class BaseXMLEventHandler implements XMLEventHandler {
 	}
 	
 	protected Map<String,String> getValidAttributesAndValues(StartElement event, List<String> validAttributes) {
-		Map<String,String> validAttributesAndValues = Maps.newHashMap();
+		LinkedHashMap<String,String> validAttributesAndValues = Maps.newLinkedHashMap();
 		@SuppressWarnings("unchecked")
 		Iterator<Attribute> actualAttributesIterator = event.getAttributes();
 		while (actualAttributesIterator.hasNext()) {
