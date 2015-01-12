@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ft.bodyprocessing</groupId>
 	<artifactId>body-processing</artifactId>
-	<version>0.0.9</version>
+	<version>0.0.10</version>
 	<name>${project.artifactId}</name>
 
 	<properties>
@@ -313,6 +313,18 @@
 			<artifactId>hamcrest-all</artifactId>
 			<scope>test</scope>
 		</dependency>
+        <dependency>
+            <groupId>org.xmlmatchers</groupId>
+            <artifactId>xml-matchers</artifactId>
+            <version>1.0-RC1</version>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xercesImpl</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 	</dependencies>
 
     <reporting>
