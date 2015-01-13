@@ -1,11 +1,8 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
-import org.apache.commons.lang.StringUtils;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
@@ -102,27 +99,10 @@ public abstract class BaseXMLParser<T> {
 	protected String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
 		ElementRawDataParser rawDataParser = new ElementRawDataParser();
 		try {
-			return rawDataParser.parse(elementName, xmlEventReader);
+			return rawDataParser.parse(elementName, xmlEventReader).trim();
 		} catch (XMLStreamException e) {
 			return null;
 		}
-	}
-
-	protected String parseRawContent(String elementName, XMLEventReader xmlEventReader, StartElement nextStartElement) {
-		ElementRawDataParser rawDataParser = new ElementRawDataParser();
-		try {
-			return rawDataParser.parse(elementName, xmlEventReader, nextStartElement);
-		} catch (XMLStreamException e) {
-			return null;
-		}
-	}
-
-	protected String parseAttribute(String attributeName, StartElement startElement) {
-		Attribute attributeValue = startElement.getAttributeByName(new QName(attributeName));
-		if(attributeValue == null || StringUtils.isBlank(attributeValue.getValue())) {
-			return null;
-		}
-		return attributeValue.getValue();
 	}
 }
 
