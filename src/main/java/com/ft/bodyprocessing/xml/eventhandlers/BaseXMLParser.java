@@ -96,6 +96,15 @@ public abstract class BaseXMLParser<T> {
 		}
 	}
 
+	protected String parseRawContent(String elementName, XMLEventReader xmlEventReader, StartElement nextStartElement) {
+		ElementRawDataParser rawDataParser = new ElementRawDataParser();
+		try {
+			return rawDataParser.parse(elementName, xmlEventReader, nextStartElement);
+		} catch (XMLStreamException e) {
+			return null;
+		}
+	}
+
 	protected String parseRawContent(String elementName, XMLEventReader xmlEventReader) {
 		ElementRawDataParser rawDataParser = new ElementRawDataParser();
 		try {

@@ -84,6 +84,15 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 	}
 
 	@Override
+	public void writeRaw(String data) {
+		try {
+			xmlStreamWriter2.writeRaw(data);
+		} catch (XMLStreamException e) {
+			throw new BodyProcessingException(e);
+		}
+	}
+
+	@Override
 	public void writeStartTag(String name, Map<String, String> validAttributesAndValues) {
 		try {
 		    xmlStreamWriter2.writeStartElement(name);
