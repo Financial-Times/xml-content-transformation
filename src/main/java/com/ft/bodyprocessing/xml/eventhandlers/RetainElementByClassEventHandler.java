@@ -30,8 +30,15 @@ public class RetainElementByClassEventHandler extends BaseXMLEventHandler {
     }
 
     @Override
-    public void handleStartElementEvent(StartElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
-        String nameToMatch = event.getName().getLocalPart();
+    public void handleStartElementEvent(StartElement topLevelStartElementEvent, XMLEventReader xmlEventReader, BodyWriter eventWriter, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
+
+        if(isTargetedClass(topLevelStartElementEvent)) {
+            writeStartElement(eventWriter, topLevelStartElementEvent);
+        } else {
+            fallbackHandler.handleStartElementEvent(topLevelStartElementEvent,xmlEventReader,eventWriter,bodyProcessingContext);
+        }
+
+        String nameToMatch = topLevelStartElementEvent.getName().getLocalPart();
         int count = 0;
         while (xmlEventReader.hasNext()) {
             XMLEvent currentEvent = xmlEventReader.nextEvent();
@@ -41,16 +48,19 @@ public class RetainElementByClassEventHandler extends BaseXMLEventHandler {
                         .equals(newStartElement.getName().getLocalPart())) {
                     count++;
                 }
-                if (isTargetedClass(event)) {
-                    eventWriter.writeStartTag(newStartElement.getName().getLocalPart(),getValidAttributesAndValues(newStartElement));
+                if (isTargetedClass(topLevelStartElementEvent)) {
+                    writeStartElement(eventWriter, newStartElement);
                 } else {
                     fallbackHandler.handleStartElementEvent(newStartElement, xmlEventReader, eventWriter, bodyProcessingContext);
                 }
             }
+            if(currentEvent.isCharacters()) {
+                eventWriter.write(currentEvent.asCharacters().getData());
+            }
             if (currentEvent.isEndElement()) {
                 EndElement endElement = currentEvent.asEndElement();
                 String localName = endElement.getName().getLocalPart();
-                if (isTargetedClass(event)) {
+                if (isTargetedClass(topLevelStartElementEvent)) {
                     eventWriter.writeEndTag(localName);
                 } else {
                     fallbackHandler.handleEndElementEvent(endElement, xmlEventReader, eventWriter);
@@ -64,6 +74,10 @@ public class RetainElementByClassEventHandler extends BaseXMLEventHandler {
                 }
             }
         }
+    }
+
+    private void writeStartElement(BodyWriter eventWriter, StartElement newStartElement) {
+        eventWriter.writeStartTag(newStartElement.getName().getLocalPart(),getValidAttributesAndValues(newStartElement));
     }
 
     @Override

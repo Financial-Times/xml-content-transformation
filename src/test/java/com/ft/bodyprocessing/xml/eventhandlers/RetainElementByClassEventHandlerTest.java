@@ -39,7 +39,7 @@ public class RetainElementByClassEventHandlerTest extends BaseXMLEventHandlerTes
     @Before
     public void setUp() throws Exception {
         eventHandler = new RetainElementByClassEventHandler(targetedHtmlClass, mockFallBackHandler);
-        when(mockXmlEventReader.hasNext()).thenReturn(true, true, false);
+        when(mockXmlEventReader.hasNext()).thenReturn(true, false);
         when(mockXmlEventReader.nextEvent()).thenReturn(mockEvent);
     }
 
@@ -85,9 +85,9 @@ public class RetainElementByClassEventHandlerTest extends BaseXMLEventHandlerTes
     }
 
     private void mockWholeElement(StartElement startElement, EndElement endElement) {
-        when(mockEvent.isStartElement()).thenReturn(true, false);
+        when(mockEvent.isStartElement()).thenReturn(false);
         when(mockEvent.asStartElement()).thenReturn(startElement);
-        when(mockEvent.isEndElement()).thenReturn(false, true);
+        when(mockEvent.isEndElement()).thenReturn(true);
         when(mockEvent.asEndElement()).thenReturn(endElement);
     }
 }
