@@ -11,6 +11,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.util.Arrays;
@@ -57,6 +58,10 @@ public class RetainElementByClassEventHandler extends BaseXMLEventHandler {
             if(currentEvent.isCharacters()) {
                 eventWriter.write(currentEvent.asCharacters().getData());
             }
+            if(currentEvent.isEntityReference()) {
+                EntityReference entityReference = (EntityReference) currentEvent;
+                eventWriter.writeEntityReference(entityReference.getName());
+            }
             if (currentEvent.isEndElement()) {
                 EndElement endElement = currentEvent.asEndElement();
                 String localName = endElement.getName().getLocalPart();
@@ -66,7 +71,6 @@ public class RetainElementByClassEventHandler extends BaseXMLEventHandler {
                     fallbackHandler.handleEndElementEvent(endElement, xmlEventReader, eventWriter);
                 }
                 if (nameToMatch.equals(localName)) {
-
                     if (count == 0) {
                         return;
                     }
