@@ -34,7 +34,7 @@ public class HTML5VoidElementHandlingXMLBodyWriter implements BodyWriter {
 	
 	private static final String P_TAG_NAME = "p";
 
-    private static List<String> VOID_ELEMENTS = Arrays.asList(
+    public static List<String> VOID_ELEMENTS = Arrays.asList(
 			"area", "base", "br", "col", "command", "embed", 
 			"hr", "img", "input", "keygen", "link", "meta", 
 			"param", "source", "track", "wbr");
