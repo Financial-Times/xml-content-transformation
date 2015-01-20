@@ -22,13 +22,13 @@ import static org.junit.Assert.assertThat;
 public class Html5SelfClosingTagBodyProcessorNonVoidElementsTest {
 
     private static final String[] NON_VOID_ELEMENT_EXAMPLES = new String[] {
-            "p", "em" , "b", "i" , "strong"
+            "p", "em" , "b", "i" , "strong", "script"
     };
     private String elementName;
 
     @Parameterized.Parameters(name= "{index}: {0}")
     public static Collection<String[]> voidElements() {
-        List<String[]> params = new ArrayList<String[]>(HTML5VoidElementHandlingXMLBodyWriter.VOID_ELEMENTS.size());
+        List<String[]> params = new ArrayList<String[]>(NON_VOID_ELEMENT_EXAMPLES.length);
         for(String name : NON_VOID_ELEMENT_EXAMPLES) {
             params.add(new String[] { name });
         }
@@ -47,9 +47,7 @@ public class Html5SelfClosingTagBodyProcessorNonVoidElementsTest {
             String result = processor.process(example, someContext());
 
             assertThat(result,is(expectedResult));
-
     }
-
 
     private BodyProcessingContext someContext() {
         return new BodyProcessingContext() {};
