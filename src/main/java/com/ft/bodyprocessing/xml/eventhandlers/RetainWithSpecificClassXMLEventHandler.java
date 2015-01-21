@@ -1,7 +1,9 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -12,23 +14,24 @@ import javax.xml.stream.events.StartElement;
 
 import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.writer.BodyWriter;
-import com.ft.bodyprocessing.xml.eventhandlers.BaseXMLEventHandler;
-import com.ft.bodyprocessing.xml.eventhandlers.XMLEventHandler;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-//TODO - write JUnit tests!
 public class RetainWithSpecificClassXMLEventHandler extends BaseXMLEventHandler {
 
     private String targetedHtmlClass;
     private XMLEventHandler fallbackHandler;
+    private List<String> validAttributes;
 
-    public RetainWithSpecificClassXMLEventHandler(String targetedHtmlClass, XMLEventHandler fallbackHandler) {
-        // TODO - we want to choose which attributes to keep, so also need to pass in a list of valid attribute values (there are examples in other event handlers)
+    public RetainWithSpecificClassXMLEventHandler(String targetedHtmlClass, XMLEventHandler fallbackHandler, String... validAttributes) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(targetedHtmlClass),"targeted html class name not specified");
-
         this.targetedHtmlClass = targetedHtmlClass;
         this.fallbackHandler = fallbackHandler;
+        this.validAttributes = new ArrayList<String>();
+        for(String name: validAttributes) {
+            this.validAttributes.add(name.toLowerCase());
+        }
+        this.validAttributes.add("class");
     }
 
     @Override
@@ -43,7 +46,9 @@ public class RetainWithSpecificClassXMLEventHandler extends BaseXMLEventHandler 
             fallbackHandler.handleStartElementEvent(event,xmlEventReader,eventWriter,bodyProcessingContext);
             return;
         }
-        eventWriter.writeStartTag(event.getName().getLocalPart(),getValidAttributesAndValues(event));
+
+        Map<String,String> validAttributesAndValues  = getValidAttributesAndValues(event,validAttributes);
+        eventWriter.writeStartTag(event.getName().getLocalPart(), validAttributesAndValues);
     }
     
     private boolean isTargetedClass(StartElement event) {
