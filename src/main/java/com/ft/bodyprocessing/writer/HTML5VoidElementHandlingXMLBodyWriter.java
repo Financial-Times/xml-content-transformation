@@ -17,15 +17,15 @@ import com.ft.bodyprocessing.regex.RegexRemoverBodyProcessor;
 
 
 /**
- * An XML based writer that does NOT self-close elements, except for specific void html5 elements.
+ * <p>An XML based writer that does NOT self-close elements, except for specific void html5 elements.</p>
  * 
- * Generally in html5, elements should NOT be self closing. i.e. <p></p> is valid but <p/> is not.
+ * <p>Generally in HTML5, elements should NOT be self closing. i.e. <code>&lt;p&gt;&lt;/p&gt;</code> is valid but <code>&lt;p/&gt;</code> is not.</p>
  * 
- * For void elements, i.e. ones that can never have any content, it is NOT valid to have 
- * separate start and end elements. e.g. <br> and <br/> are both valid html5, <br></br> is not
+ * <p>For void elements, i.e. ones that can never have any content, it is NOT valid to have
+ * separate start and end elements. e.g. <code>&lt;br&gt;</code> and <code>&lt;br/&gt;</code> are both valid html5, <code>&lt;br&gt;&lt;/br&gt;</code> is not</p>
  * 
- * For html5, the void element doesn't require a trailing slash but can support it - as we want 
- * valid xml, we will output a trailing slash, i.e. <br/>
+ * <p>For html5, the void element doesn't require a trailing slash but can support it - as we want
+ * valid xml, we will output a trailing slash, i.e. <code>&lt;br/&gt;</code></p>
  * 
  * @author sarah.wells
  *
