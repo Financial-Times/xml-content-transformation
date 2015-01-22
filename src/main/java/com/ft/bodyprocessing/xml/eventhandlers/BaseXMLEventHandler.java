@@ -1,13 +1,9 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
-import com.ft.bodyprocessing.BodyProcessingContext;
-import com.ft.bodyprocessing.writer.BodyWriter;
-import com.google.common.collect.Maps;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
@@ -17,6 +13,10 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.EntityReference;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
+
+import com.ft.bodyprocessing.BodyProcessingContext;
+import com.ft.bodyprocessing.writer.BodyWriter;
+import com.google.common.collect.Maps;
 
 public class BaseXMLEventHandler implements XMLEventHandler {
 
