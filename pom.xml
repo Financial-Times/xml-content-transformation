@@ -4,9 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ft.bodyprocessing</groupId>
 	<artifactId>body-processing</artifactId>
-
-	<version>0.0.14</version>
-
+	<version>0.0.15</version>
 	<name>${project.artifactId}</name>
 
 	<properties>
@@ -154,7 +152,7 @@
 									<version>[3.0.5,4.0)</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
-									<version>[1.7,1.9)</version>
+									<version>[1.7,1.8)</version>
 								</requireJavaVersion>
 								<requirePluginVersions>
 									<message>Best Practice is to always define versions for maven
@@ -200,7 +198,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.2.201409121644</version>
+                <version>0.6.3.201306030806</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -315,18 +313,6 @@
 			<artifactId>hamcrest-all</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.xmlmatchers</groupId>
-            <artifactId>xml-matchers</artifactId>
-            <version>1.0-RC1</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>xerces</groupId>
-                    <artifactId>xercesImpl</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 	</dependencies>
 
     <reporting>
