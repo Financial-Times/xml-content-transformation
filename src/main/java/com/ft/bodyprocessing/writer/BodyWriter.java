@@ -9,6 +9,8 @@ public interface BodyWriter {
 
 	void write(String data);
 
+	void writeRaw(String data);
+
 	void writeStartTag(String name, Map<String, String> validAttributesAndValues);
 
 	void writeEndTag(String name);

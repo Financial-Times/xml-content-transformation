@@ -11,18 +11,15 @@ import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static java.util.Arrays.asList;
 
 public class LinkTagXMLEventHandler extends BaseXMLEventHandler {
 
 	private static final String A_TAG_NAME = "a";
 	private static final QName HREF_ATTRIBUTE = new QName("href");
-	private static List<QName> validAttributes;
+	private List<QName> validAttributes;
 
 	public LinkTagXMLEventHandler(String... validAttributes) {
 		this.validAttributes = Lists.newArrayList();
