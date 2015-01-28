@@ -1,5 +1,11 @@
 package com.ft.bodyprocessing.html;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.BodyProcessingException;
 import com.ft.bodyprocessing.BodyProcessor;
@@ -10,12 +16,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.List;
 
 /**
  * RemoveEmptyElementsBodyProcessor
@@ -44,7 +44,7 @@ public class RemoveEmptyElementsBodyProcessor implements BodyProcessor {
 		}
 
 		Document doc = createDocument(bodyHtml);
-		Element body = (Element) doc.getElementsByTagName("body").item(0);
+		Element body = doc.getDocumentElement();
 
 		int removedElements;
 		do {

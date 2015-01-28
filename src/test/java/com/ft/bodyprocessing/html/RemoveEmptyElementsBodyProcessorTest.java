@@ -1,13 +1,14 @@
 package com.ft.bodyprocessing.html;
 
-import org.junit.Test;
-import org.xmlmatchers.XmlMatchers;
-
 import static com.ft.bodyprocessing.TestBodyProcessingContext.testContext;
 import static java.util.Arrays.asList;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.xmlmatchers.transform.XmlConverters.the;
+
+import com.ft.bodyprocessing.BodyProcessingException;
+import org.junit.Test;
+import org.xmlmatchers.XmlMatchers;
 
 /**
  * RemoveEmptyElementsBodyProcessorTest
@@ -52,6 +53,39 @@ public class RemoveEmptyElementsBodyProcessorTest {
 
 		assertEquivalentXml(result, expectedResult);
 	}
+
+    @Test
+    public void shouldRemoveElementsThatWrapEmptyElementsWhenFirstNodeIsAnything() {
+        String example = "<anything><p><a href=\"ghh\"> </a></p><p>Test</p></anything>";
+        String expectedResult = "<anything><p>Test</p></anything>";
+
+        RemoveEmptyElementsBodyProcessor processor = paragraphsAndLinksWithoutImages();
+
+        String result = processor.process(example, testContext());
+
+        assertEquivalentXml(result, expectedResult);
+    }
+
+    @Test(expected = BodyProcessingException.class)
+    public void shouldFailOnNonXml() {
+        String example = "What happens when there are no wrapping nodes";
+
+        RemoveEmptyElementsBodyProcessor processor = paragraphsAndLinksWithoutImages();
+
+        String result = processor.process(example, testContext());
+    }
+
+    @Test(expected = BodyProcessingException.class)
+    public void shouldFailOnNonXmlInsideTags() {
+        String example = "What happens when there are <p></p> empty tags in the middle with no wrapping nodes";
+        String expectedResult = "<anything><p>Test</p></anything>";
+
+        RemoveEmptyElementsBodyProcessor processor = paragraphsAndLinksWithoutImages();
+
+        String result = processor.process(example, testContext());
+
+        assertEquivalentXml(result, expectedResult);
+    }
 
 	@Test
 	public void shouldReturnEmptyStringIfThereIsNoContentLeft() {
