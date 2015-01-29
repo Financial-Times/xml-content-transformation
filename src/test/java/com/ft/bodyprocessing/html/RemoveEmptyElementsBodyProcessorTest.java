@@ -69,7 +69,6 @@ public class RemoveEmptyElementsBodyProcessorTest {
     @Test(expected = BodyProcessingException.class)
     public void shouldFailOnNonXml() {
         String example = "What happens when there are no wrapping nodes";
-
         RemoveEmptyElementsBodyProcessor processor = paragraphsAndLinksWithoutImages();
 
         String result = processor.process(example, testContext());
@@ -78,13 +77,9 @@ public class RemoveEmptyElementsBodyProcessorTest {
     @Test(expected = BodyProcessingException.class)
     public void shouldFailOnNonXmlInsideTags() {
         String example = "What happens when there are <p></p> empty tags in the middle with no wrapping nodes";
-        String expectedResult = "<anything><p>Test</p></anything>";
-
         RemoveEmptyElementsBodyProcessor processor = paragraphsAndLinksWithoutImages();
 
         String result = processor.process(example, testContext());
-
-        assertEquivalentXml(result, expectedResult);
     }
 
 	@Test
