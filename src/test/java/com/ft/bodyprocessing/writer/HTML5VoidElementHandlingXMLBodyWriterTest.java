@@ -121,6 +121,14 @@ public class HTML5VoidElementHandlingXMLBodyWriterTest {
 		String result = bodyWriter.asString();
 		assertThat("result", result, is(equalTo(CHARACTERS)));
 	}
+
+	@Test
+	public void shouldWriteRaw() {
+		bodyWriter.writeRaw(START_TAG_AS_STRING);
+		bodyWriter.flush();
+		String result = bodyWriter.asString();
+		assertThat("string was not written in its raw format", result, is(equalTo(START_TAG_AS_STRING)));
+	}
 	
 	@Test(expected=BodyProcessingException.class)
 	public void shouldFailIfWriteUnmatchedEndTag() {
