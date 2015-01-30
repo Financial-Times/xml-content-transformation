@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ft.bodyprocessing</groupId>
 	<artifactId>body-processing</artifactId>
-	<version>0.0.16</version>
+	<version>0.0.17</version>
 	<name>${project.artifactId}</name>
 
 	<properties>
