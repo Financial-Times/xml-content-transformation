@@ -18,8 +18,8 @@ public class ElementRawDataParserTest extends XMLParserTest {
 	private String rawElementContent = "<p></p>some more stuff<table><tr><td>test</td></tr>more text</table>testing 12345";
 	private String validXml = "<".concat(element).concat(">").concat(rawElementContent).concat("</").concat(element).concat(">");
 
-	private String rawValidNestTables = "<p></p>some more stuff<table><th><some-element>more text</some-element></th></table>testing 12345";
-	private String validXmlWNestedTables = "<".concat(element).concat(">").concat(rawValidNestTables).concat("</").concat(element).concat(">");
+	private String rawValidNestWithinTables = "<p></p>some more stuff<table><th><some-element>more text</some-element></th></table>testing 12345";
+	private String validXmlWNestedWithinTables = "<".concat(element).concat(">").concat(rawValidNestWithinTables).concat("</").concat(element).concat(">");
 
 
 	@Test
@@ -34,22 +34,22 @@ public class ElementRawDataParserTest extends XMLParserTest {
 
 	@Test
 	public void shouldParseElementContentsWNestedTableElements() throws XMLStreamException {
-		xmlEventReader = createReaderForXml(validXmlWNestedTables);
+		xmlEventReader = createReaderForXml(validXmlWNestedWithinTables);
 		moveReaderToElement(xmlEventReader, element);
 
 		ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
 		String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader);
-		assertThat(rawValidNestTables, equalTo(actualRawContent));
+		assertThat(rawValidNestWithinTables, equalTo(actualRawContent));
 	}
 
 	@Test
 	public void shouldParseWholeElementContentsWNestedTableElements() throws XMLStreamException {
-		xmlEventReader = createReaderForXml(validXmlWNestedTables);
+		xmlEventReader = createReaderForXml(validXmlWNestedWithinTables);
 
 		ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
 		StartElement startElement = getStartElement(xmlEventReader);
 		String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader, startElement);
-		assertThat(validXmlWNestedTables, equalTo(actualRawContent));
+		assertThat(validXmlWNestedWithinTables, equalTo(actualRawContent));
 	}
 
 	@Test
