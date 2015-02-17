@@ -3,13 +3,13 @@ package com.ft.bodyprocessing.xml.eventhandlers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.namespace.QName;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.EntityReference;
+import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 
 import org.codehaus.stax2.ri.evt.AttributeEventImpl;
@@ -17,7 +17,10 @@ import org.codehaus.stax2.ri.evt.CharactersEventImpl;
 import org.codehaus.stax2.ri.evt.CommentEventImpl;
 import org.codehaus.stax2.ri.evt.EndElementEventImpl;
 import org.codehaus.stax2.ri.evt.EntityReferenceEventImpl;
+import org.codehaus.stax2.ri.evt.ProcInstrEventImpl;
 import org.codehaus.stax2.ri.evt.StartElementEventImpl;
+
+
 
 public class BaseXMLEventHandlerTest {
 
@@ -36,6 +39,10 @@ public class BaseXMLEventHandlerTest {
 	protected EntityReference getEntityReference(String entityReferenceName) {
 		return new EntityReferenceEventImpl(null, entityReferenceName);
 	}
+
+    protected ProcessingInstruction getProcessingInstruction(String target, String data) {
+        return new ProcInstrEventImpl(null, target, data);
+    }
 	
 	protected Comment getComment(String text) {
 		return new CommentEventImpl(null, text);

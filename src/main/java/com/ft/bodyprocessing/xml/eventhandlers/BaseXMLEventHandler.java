@@ -11,6 +11,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.EntityReference;
+import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -54,8 +55,13 @@ public class BaseXMLEventHandler implements XMLEventHandler {
 			throws XMLStreamException {
 		// By default, do nothing	
 	}
-	
-	protected void skipUntilMatchingEndTag(String nameToMatch, XMLEventReader xmlEventReader) throws XMLStreamException {
+
+    @Override
+    public void handleProcessingInstructionEvent(ProcessingInstruction event, XMLEventReader xmlEventReader, BodyWriter bodyWriter) throws XMLStreamException {
+        // By default, do nothing
+    }
+
+    protected void skipUntilMatchingEndTag(String nameToMatch, XMLEventReader xmlEventReader) throws XMLStreamException {
 		int count = 0;
 		while (xmlEventReader.hasNext()) {
 			XMLEvent event = xmlEventReader.nextEvent();
