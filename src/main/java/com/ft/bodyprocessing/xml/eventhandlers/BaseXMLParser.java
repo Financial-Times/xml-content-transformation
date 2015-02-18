@@ -1,5 +1,7 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
+import com.ft.bodyprocessing.BodyProcessingContext;
+
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
@@ -18,13 +20,13 @@ public abstract class BaseXMLParser<T> {
 		this.startElementName = startElementName;
 	}
 
-	public T parseElementData(StartElement startElement, XMLEventReader xmlEventReader) throws XMLStreamException {
+	public T parseElementData(StartElement startElement, XMLEventReader xmlEventReader, BodyProcessingContext bodyProcessingContext) throws XMLStreamException {
 		T dataBean = createDataBeanInstance();
 
 		try {
 			// Use the start element (trigger element) to populate the bean as
 			// some types require parsing to start from the starting element.
-			populateBean(dataBean, startElement, xmlEventReader);
+			populateBean(dataBean, startElement, xmlEventReader, bodyProcessingContext);
 
 			// Check if more data beyond the start element is needed to populate the data bean
 			if(doesTriggerElementContainAllDataNeeded()) {
@@ -36,7 +38,7 @@ public abstract class BaseXMLParser<T> {
 
 				if (nextEvent.isStartElement()) {
 					StartElement nextStartElement = nextEvent.asStartElement();
-					populateBean(dataBean, nextStartElement, xmlEventReader);
+					populateBean(dataBean, nextStartElement, xmlEventReader, bodyProcessingContext);
 					if(isElementNamed(nextStartElement.getName(), startElementName)) {
 						depth++;
 					}
@@ -70,7 +72,8 @@ public abstract class BaseXMLParser<T> {
 		return elementName.getLocalPart().toLowerCase().equals(nameToMatch.toLowerCase());
 	}
 
-	protected abstract void populateBean(T dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader)
+	protected abstract void populateBean(T dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader,
+										 BodyProcessingContext bodyProcessingContext)
 			throws UnexpectedElementStructureException;
 
 	private void skipUntilMatchingEndTag(String nameToMatch, XMLEventReader xmlEventReader) throws XMLStreamException {
