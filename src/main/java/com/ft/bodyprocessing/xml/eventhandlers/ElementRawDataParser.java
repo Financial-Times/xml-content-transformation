@@ -1,11 +1,11 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
+import java.io.StringWriter;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-import java.io.StringWriter;
 
 public class ElementRawDataParser {
 
@@ -67,8 +67,13 @@ public class ElementRawDataParser {
                     continue;
                 }
             }
-            // Write the parsed element/characters
-            childEvent.writeAsEncodedUnicode(writer);
+            if(!childEvent.isProcessingInstruction()){
+                // childEvent.writeAsEncodedUnicode(writer) has a bug for Processing instructions,
+                // removes whitespace but actually we don't want to keep the event anyway.
+
+                // Write the parsed element/characters
+                childEvent.writeAsEncodedUnicode(writer);
+            }
         }
         
         if(!hasReachedEndElement) {
