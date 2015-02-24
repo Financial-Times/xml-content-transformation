@@ -4,6 +4,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 
+import com.ft.bodyprocessing.BodyProcessingContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -27,7 +28,7 @@ public class BaseXMLParserTest extends XMLParserTest {
 	public void shouldReturnCorrectValue() throws XMLStreamException {
 		xmlEventReader = createReaderForXml(VALID_XML);
 		StartElement startElement = getStartElement(xmlEventReader);
-		TestData testData = testParser.parseElementData(startElement, xmlEventReader);
+		TestData testData = testParser.parseElementData(startElement, xmlEventReader, null);
 
 		assertThat(testData.getValue(), equalTo("abc"));
 	}
@@ -36,7 +37,7 @@ public class BaseXMLParserTest extends XMLParserTest {
 	public void shouldReturnAppropriateExceptionForInvalidXml() throws XMLStreamException {
 		xmlEventReader = createReaderForXml(INVALID_XML);
 		StartElement startElement = getStartElement(xmlEventReader);
-		testParser.parseElementData(startElement, xmlEventReader);
+		testParser.parseElementData(startElement, xmlEventReader, null);
 	}
 
 	private class TestData {
@@ -71,7 +72,8 @@ public class BaseXMLParserTest extends XMLParserTest {
 		}
 
 		@Override
-		protected void populateBean(TestData dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader) throws UnexpectedElementStructureException {
+		protected void populateBean(TestData dataBean, StartElement nextStartElement, XMLEventReader xmlEventReader,
+									BodyProcessingContext bodyProcessingContext) throws UnexpectedElementStructureException {
 			if (isElementNamed(nextStartElement.getName(), VALUE_ELEMENT)) {
 				dataBean.setValue(parseRawContent(VALUE_ELEMENT, xmlEventReader));
 			}
