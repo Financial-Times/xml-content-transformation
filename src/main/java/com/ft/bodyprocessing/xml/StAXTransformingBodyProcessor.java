@@ -1,17 +1,13 @@
 package com.ft.bodyprocessing.xml;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EntityReference;
+import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.XMLEvent;
-
-import com.google.common.base.Preconditions;
-import org.codehaus.stax2.XMLInputFactory2;
-import org.codehaus.stax2.XMLOutputFactory2;
 
 import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.BodyProcessingException;
@@ -21,6 +17,8 @@ import com.ft.bodyprocessing.writer.BodyWriterFactory;
 import com.ft.bodyprocessing.writer.HTML5VoidElementHandlingXMLBodyWriterFactory;
 import com.ft.bodyprocessing.xml.eventhandlers.XMLEventHandler;
 import com.ft.bodyprocessing.xml.eventhandlers.XMLEventHandlerRegistry;
+import org.codehaus.stax2.XMLInputFactory2;
+import org.codehaus.stax2.XMLOutputFactory2;
 
 
 public class StAXTransformingBodyProcessor implements BodyProcessor {
@@ -97,6 +95,9 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
     	} else if (event.getEventType() == XMLEvent.ENTITY_REFERENCE) {
     		eventHandler = eventHandlerRegistry.getEventHandler((EntityReference) event);
     		eventHandler.handleEntityReferenceEvent((EntityReference) event, xmlEventReader, bodyWriter);
+        } else if (event.getEventType() == XMLEvent.PROCESSING_INSTRUCTION) {
+            eventHandler = eventHandlerRegistry.getEventHandler((ProcessingInstruction) event);
+            eventHandler.handleProcessingInstructionEvent((ProcessingInstruction) event, xmlEventReader, bodyWriter);
     	} else {
             eventHandler = eventHandlerRegistry.getEventHandler(event);
             eventHandler.handleEvent(event, xmlEventReader, bodyWriter);

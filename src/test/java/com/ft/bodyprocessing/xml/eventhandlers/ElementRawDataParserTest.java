@@ -1,14 +1,14 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
-import org.junit.Test;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.junit.Test;
 
 public class ElementRawDataParserTest extends XMLParserTest {
 
@@ -31,6 +31,18 @@ public class ElementRawDataParserTest extends XMLParserTest {
 		String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader);
 		assertThat(rawElementContent, equalTo(actualRawContent));
 	}
+
+    @Test
+	public void shouldParseElementContentsAndRemoveProcessingInstruction() throws XMLStreamException {
+		String xmlWithPi = "<".concat(element).concat(">").concat("<?EM-dummyText [Insert news in depth title here]?>").concat("</").concat(element).concat(">");
+        xmlEventReader = createReaderForXml(xmlWithPi);
+        moveReaderToElement(xmlEventReader, element);
+
+        ElementRawDataParser elementRawDataParser = new ElementRawDataParser();
+		String actualRawContent = elementRawDataParser.parse("some-element", xmlEventReader);
+		assertThat(actualRawContent, equalTo(""));
+	}
+
 
 	@Test
 	public void shouldParseElementContentsWNestedTableElements() throws XMLStreamException {

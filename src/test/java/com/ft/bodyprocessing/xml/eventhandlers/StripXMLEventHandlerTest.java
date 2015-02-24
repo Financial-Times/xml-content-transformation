@@ -48,11 +48,17 @@ public class StripXMLEventHandlerTest extends BaseXMLEventHandlerTest {
 	}
 	
 	@Test
-	public void commentShouldNotBeOutput() throws Exception {
-		Comment comment = getComment("comment text");
-		eventHandler.handleCommentEvent(comment, mockXmlEventReader, eventWriter);
-		verifyZeroInteractions(mockXmlEventReader, eventWriter);
-	}
+     public void commentShouldNotBeOutput() throws Exception {
+        Comment comment = getComment("comment text");
+        eventHandler.handleCommentEvent(comment, mockXmlEventReader, eventWriter);
+        verifyZeroInteractions(mockXmlEventReader, eventWriter);
+    }
+
+    @Test
+    public void processingInstructionShouldNotBeOutput() throws Exception {
+        eventHandler.handleProcessingInstructionEvent(getProcessingInstruction("EM", "dummyText[Insert news in depth title here"), mockXmlEventReader, eventWriter);
+        verifyZeroInteractions(mockXmlEventReader, eventWriter);
+    }
 		
 	@Test
 	public void entityReferenceShouldNotBeOutput() throws Exception {

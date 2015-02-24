@@ -6,6 +6,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.Comment;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.EntityReference;
+import javax.xml.stream.events.ProcessingInstruction;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
@@ -21,5 +22,6 @@ public interface XMLEventHandler {
 	public void handleEndElementEvent(EndElement event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException;
 	public void handleCommentEvent(Comment event, XMLEventReader xmlEventReader, BodyWriter eventWriter) throws XMLStreamException;
 	public void handleEntityReferenceEvent(EntityReference event, XMLEventReader xmlEventReader, BodyWriter bodyWriter) throws XMLStreamException;
+	public void handleProcessingInstructionEvent(ProcessingInstruction event, XMLEventReader xmlEventReader, BodyWriter bodyWriter) throws XMLStreamException;
 
 }

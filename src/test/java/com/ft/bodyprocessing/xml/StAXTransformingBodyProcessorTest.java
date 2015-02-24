@@ -17,13 +17,14 @@ import com.ft.bodyprocessing.xml.eventhandlers.XMLEventHandlerRegistry;
 
 public class StAXTransformingBodyProcessorTest {
 
-	private static final String BODY = "<p>Text to process with entity ref &euro; in it</p><!-- comment --><p>More text to process</p>";
+	private static final String BODY = "<p>Text to process with entity ref &euro; in it</p><!-- comment --><p>More text to process.</p><p><?EM-dummyText [Insert news in depth title here]?>Processing instruction is removed by default.</p>";
 
-	private static final String EXPECTED_BODY_CHARACTERS_REMOVED = "<p>&euro;</p><!-- comment --><p></p>";
-	private static final String EXPECTED_BODY_COMMENT_REMOVED = "<p>Text to process with entity ref &euro; in it</p><p>More text to process</p>";
-	private static final String EXPECTED_BODY_START_END_TAGS_REMOVED = "Text to process with entity ref &euro; in it<!-- comment -->More text to process";
-	private static final String EXPECTED_BODY_ENTITY_REFERENCE_REMOVED = "<p>Text to process with entity ref  in it</p><!-- comment --><p>More text to process</p>";
-	
+	private static final String EXPECTED_BODY_CHARACTERS_REMOVED = "<p>&euro;</p><!-- comment --><p></p><p></p>";
+	private static final String EXPECTED_BODY_COMMENT_REMOVED = "<p>Text to process with entity ref &euro; in it</p><p>More text to process.</p><p>Processing instruction is removed by default.</p>";
+	private static final String EXPECTED_BODY_START_END_TAGS_REMOVED = "Text to process with entity ref &euro; in it<!-- comment -->More text to process.Processing instruction is removed by default.";
+	private static final String EXPECTED_BODY_ENTITY_REFERENCE_REMOVED = "<p>Text to process with entity ref  in it</p><!-- comment --><p>More text to process.</p><p>Processing instruction is removed by default.</p>";
+	private static final String EXPECTED_BODY_PROCESSING_INSTR_REMOVED = "<p>Text to process with entity ref &euro; in it</p><!-- comment --><p>More text to process.</p><p>Processing instruction is removed by default.</p>";
+
 	private static final String INVALID_BODY = "<p>Unbalanced xml...";
 
 	private StAXTransformingBodyProcessor bodyProcessor;
@@ -72,6 +73,27 @@ public class StAXTransformingBodyProcessorTest {
 		String processedBody = bodyProcessor.process(BODY, new BodyProcessingContext(){});
 		assertThat("processedBody", processedBody, is(equalTo(EXPECTED_BODY_ENTITY_REFERENCE_REMOVED)));
 	}
+
+    @Test
+    public void shouldHandleProcessingInstructionWithCorrectEventHandler() {
+        XMLEventHandlerRegistry eventHandlerRegistry = new XMLEventHandlerRegistry() {
+            { super.registerDefaultEventHandler(new RetainXMLEventHandler());}
+        };
+        bodyProcessor = new StAXTransformingBodyProcessor(eventHandlerRegistry);
+        String processedBody = bodyProcessor.process(BODY, new BodyProcessingContext(){});
+        assertThat("processedBody", processedBody, is(equalTo(EXPECTED_BODY_PROCESSING_INSTR_REMOVED)));
+    }
+
+    @Test
+    public void shouldHandleWithCorrectEventHandler() {
+        XMLEventHandlerRegistry eventHandlerRegistry = new XMLEventHandlerRegistry() {
+            { super.registerDefaultEventHandler(new RetainXMLEventHandler());
+                super.registerEntityReferenceEventHandler(new StripXMLEventHandler());}
+        };
+        bodyProcessor = new StAXTransformingBodyProcessor(eventHandlerRegistry);
+        String processedBody = bodyProcessor.process(BODY, new BodyProcessingContext(){});
+        assertThat("processedBody", processedBody, is(equalTo(EXPECTED_BODY_ENTITY_REFERENCE_REMOVED)));
+    }
 	
 	@Test(expected = BodyProcessingException.class)
 	public void shouldFailForInvalidXML() {
