@@ -37,7 +37,7 @@ public class VideoMatcherTest {
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
 
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
 
         String result = video.getUrl();
 
@@ -52,7 +52,7 @@ public class VideoMatcherTest {
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
 
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
 
         String result = video.getUrl();
 
@@ -66,7 +66,7 @@ public class VideoMatcherTest {
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
 
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
 
         String result = video.getUrl();
 
@@ -80,7 +80,7 @@ public class VideoMatcherTest {
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
 
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
 
         String result = video.getUrl();
 
@@ -96,7 +96,7 @@ public class VideoMatcherTest {
         RichContentItem attachment = new RichContentItem("http://video.ft.com/4004982305001/Super-Mario-returns-but-is-it-enough-/editorschoice","Mario & uncertainty");
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
 
         String actualTitle =  video.getTitle();
         assertThat(actualTitle, is("Mario & uncertainty"));
@@ -108,7 +108,7 @@ public class VideoMatcherTest {
         RichContentItem attachment = new RichContentItem("http://video.ft.com/","Super-Mario-returns-but-is-it-enough? & maybe  not");
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
         assertThat(video, is(nullValue()));
     }
 
@@ -120,7 +120,7 @@ public class VideoMatcherTest {
 
         VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
 
-        Video video = matcher.match(attachment);
+        Video video = matcher.filterVideo(attachment);
 
         assertThat(video, nullValue());
 

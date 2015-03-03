@@ -19,7 +19,7 @@ public class VideoMatcher {
         this.sites = sites;
     }
 
-    public Video match(RichContentItem attachment) {
+    public Video filterVideo(RichContentItem attachment) {
 
         String url = attachment.getUrl();
         boolean isEmbed;
@@ -31,29 +31,32 @@ public class VideoMatcher {
         }
 
         if(!(Strings.isNullOrEmpty(site.getTemplate()))) {
-            Pattern sitePattern = Pattern.compile(site.getUrlPattern());
-            Matcher pathMatcher = sitePattern.matcher(url);
+            Matcher pathMatcher = startSearchForURLPattern(url, site);
             pathMatcher.find();
             String id = pathMatcher.group("id");
             url = String.format(site.getTemplate(),id);
         }
 
-        isEmbed = site.getIsEmbed();
+        isEmbed = site.isEmbedded();
 
         Video video = new Video();
 
         video.setUrl(url);
-        video.setIsEmbed(isEmbed);
+        video.setEmbedded(isEmbed);
         video.setTitle(attachment.getTitle());
 
         return video;
     }
 
+    private Matcher startSearchForURLPattern(String url, VideoSiteConfiguration site) {
+        Pattern sitePattern = Pattern.compile(site.getUrlPattern());
+        return sitePattern.matcher(url);
+    }
+
     public VideoSiteConfiguration match(String url) {
 
         for(VideoSiteConfiguration site : sites) {
-            Pattern sitePattern = Pattern.compile(site.getUrlPattern());
-            Matcher pathMatcher = sitePattern.matcher(url);
+            Matcher pathMatcher = startSearchForURLPattern(url, site);
             if(pathMatcher.find()) {
                 return site;
             }

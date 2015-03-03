@@ -11,12 +11,12 @@ public class VideoSiteConfiguration {
 
     private String urlPattern;
     private String template;
-    private boolean isEmbed;
+    private boolean embedded;
 
-    public VideoSiteConfiguration(@JsonProperty("urlPattern") String urlPattern, @JsonProperty("template") String template, @JsonProperty("isEmbed") boolean isEmbed) {
+    public VideoSiteConfiguration(@JsonProperty("urlPattern") String urlPattern, @JsonProperty("template") String template, @JsonProperty("embedded") boolean isEmbed) {
         this.urlPattern = urlPattern;
         this.template = template;
-        this.isEmbed = isEmbed;
+        this.embedded = isEmbed;
     }
 
     public String getUrlPattern() {
@@ -27,5 +27,5 @@ public class VideoSiteConfiguration {
         return template;
     }
 
-    public boolean getIsEmbed() { return isEmbed; }
+    public boolean isEmbedded() { return embedded; }
 }
