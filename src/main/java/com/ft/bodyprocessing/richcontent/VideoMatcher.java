@@ -1,6 +1,5 @@
 package com.ft.bodyprocessing.richcontent;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,7 @@ public class VideoMatcher {
             if(site.hasParameters()) {
 
                 StringTokenizer queryStringParts = new StringTokenizer(attachment.getUrl(),"?&=");
-                Map<String,String> originalParameters = new HashMap<String, String>();
+                Map<String,String> originalParameters = new HashMap<>();
                 queryStringParts.nextToken(); // ignore the part before the query string
                 while (queryStringParts.hasMoreTokens()) {
                     originalParameters.put(queryStringParts.nextToken(), queryStringParts.nextToken());
