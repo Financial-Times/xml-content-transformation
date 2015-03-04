@@ -1,6 +1,10 @@
 package com.ft.bodyprocessing.richcontent;
 
+import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +39,28 @@ public class VideoMatcher {
             pathMatcher.find();
             String id = pathMatcher.group("id");
             url = String.format(site.getTemplate(),id);
+
+            if(site.hasParameters()) {
+
+                StringTokenizer queryStringParts = new StringTokenizer(attachment.getUrl(),"?&=");
+                Map<String,String> originalParameters = new HashMap<String, String>();
+                queryStringParts.nextToken(); // ignore the part before the query string
+                while (queryStringParts.hasMoreTokens()) {
+                    originalParameters.put(queryStringParts.nextToken(), queryStringParts.nextToken());
+                }
+
+                for(String param : site.getRetainedParams()) {
+                    if(originalParameters.containsKey(param)) {
+                        char delimiter = '?';
+                        if(url.contains("?")) {
+                           delimiter = '&';
+                        }
+                        url = url + delimiter + param + "=" + originalParameters.get(param);
+                    }
+                }
+            }
+
+
         }
 
         isEmbed = site.isEmbedded();

@@ -5,6 +5,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -18,12 +19,15 @@ import org.mockito.Mock;
 
 public class VideoMatcherTest {
 
+    private static final List<String> T = Collections.singletonList("t");
+    private static final List<String> NONE = Collections.emptyList();
+
     public static List<VideoSiteConfiguration> DEFAULTS = Arrays.asList(
-            new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true),
-            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false),
-            new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false),
-            new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false),
-            new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false)
+            new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true, T),
+            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false,T),
+            new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, T),
+            new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false, NONE),
+            new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false, NONE)
     );
 
     private List<VideoSiteConfiguration> videoSiteConfigurationList = DEFAULTS ;
@@ -57,6 +61,21 @@ public class VideoMatcherTest {
         String result = video.getUrl();
 
         assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck"));
+    }
+
+    @Test
+    public void shouldCopyOverWhiteListedParameter() {
+
+
+        RichContentItem attachment = new RichContentItem("http://youtu.be/V8B4CjOkcck?t=12s","Squirrel is basically Nikki Minoj");
+
+        VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
+
+        Video video = matcher.filterVideo(attachment);
+
+        String result = video.getUrl();
+
+        assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck&t=12s"));
     }
 
     @Test
