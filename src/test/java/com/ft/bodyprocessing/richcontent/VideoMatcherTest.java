@@ -23,11 +23,11 @@ public class VideoMatcherTest {
     private static final List<String> NONE = Collections.emptyList();
 
     public static List<VideoSiteConfiguration> DEFAULTS = Arrays.asList(
-            new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true, T),
-            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false,T),
-            new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, T),
-            new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false, NONE),
-            new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false, NONE)
+            new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true, T, true),
+            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false,T, true),
+            new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, T, true),
+            new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false, NONE, false), /* made false for test */
+            new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false, NONE, false) /* made false for test */
     );
 
     private List<VideoSiteConfiguration> videoSiteConfigurationList = DEFAULTS ;
@@ -39,11 +39,7 @@ public class VideoMatcherTest {
 
         RichContentItem attachment = new RichContentItem("https://www.youtube.com/embed/V8B4CjOkcck","Squirrel is basically Nikki Minoj");
 
-        VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
-
-        Video video = matcher.filterVideo(attachment);
-
-        String result = video.getUrl();
+        String result = runMatchAsNormal(attachment);
 
         assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck"));
     }
@@ -54,11 +50,7 @@ public class VideoMatcherTest {
 
         RichContentItem attachment = new RichContentItem("http://youtu.be/V8B4CjOkcck","Squirrel is basically Nikki Minoj");
 
-        VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
-
-        Video video = matcher.filterVideo(attachment);
-
-        String result = video.getUrl();
+        String result = runMatchAsNormal(attachment);
 
         assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck"));
     }
@@ -69,11 +61,7 @@ public class VideoMatcherTest {
 
         RichContentItem attachment = new RichContentItem("http://youtu.be/V8B4CjOkcck?t=12s","Squirrel is basically Nikki Minoj");
 
-        VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
-
-        Video video = matcher.filterVideo(attachment);
-
-        String result = video.getUrl();
+        String result = runMatchAsNormal(attachment);
 
         assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck&t=12s"));
     }
@@ -83,11 +71,7 @@ public class VideoMatcherTest {
 
         RichContentItem attachment = new RichContentItem("http://vimeo.com/116498390","He Took His Skin Off For Me");
 
-        VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
-
-        Video video = matcher.filterVideo(attachment);
-
-        String result = video.getUrl();
+        String result = runMatchAsNormal(attachment);
 
         assertThat(result, is("http://vimeo.com/116498390"));
     }
@@ -143,6 +127,35 @@ public class VideoMatcherTest {
 
         assertThat(video, nullValue());
 
+    }
+
+    @Test
+    public void shouldForceHttpsWhenConfigured() {
+
+
+        RichContentItem attachment = new RichContentItem("http://www.youtube.com/watch?v=V8B4CjOkcck&t=12s","Squirrel is basically Nikki Minoj");
+
+        String result = runMatchAsNormal(attachment);
+
+        assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck&t=12s"));
+    }
+
+    @Test
+    public void shouldNotForceHttpsWhenNotConfigured() {
+
+        RichContentItem attachment = new RichContentItem("http://vimeo.com/116498390","He Took His Skin Off For Me");
+
+        String result = runMatchAsNormal(attachment);
+
+        assertThat(result, is("http://vimeo.com/116498390"));
+    }
+
+    private String runMatchAsNormal(RichContentItem attachment) {
+        VideoMatcher matcher = new VideoMatcher(videoSiteConfigurationList);
+
+        Video video = matcher.filterVideo(attachment);
+
+        return video.getUrl();
     }
 
 }

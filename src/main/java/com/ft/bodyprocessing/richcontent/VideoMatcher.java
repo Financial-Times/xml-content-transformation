@@ -58,8 +58,10 @@ public class VideoMatcher {
                     }
                 }
             }
+        }
 
-
+        if(site.isForceHTTPS()) {
+            url = url.replace("http://","https://");
         }
 
         isEmbed = site.isEmbedded();

@@ -16,20 +16,24 @@ public class VideoSiteConfiguration {
     private String template;
     private boolean embedded;
     private List<String> retainedParams;
+    private boolean forceHTTPS = false;
 
     public VideoSiteConfiguration(
             @JsonProperty("urlPattern") String urlPattern,
             @JsonProperty("template") String template,
             @JsonProperty("embedded") boolean isEmbed,
-            @JsonProperty("retainedParams") List<String> retainedParams
+            @JsonProperty(value = "retainedParams", required = false) List<String> retainedParams,
+            @JsonProperty(value = "forceHTTPS", required = false) boolean forceHTTPS
     ) {
         this.urlPattern = urlPattern;
         this.template = template;
         this.embedded = isEmbed;
-        this.retainedParams = new ArrayList<String>();
+        this.forceHTTPS = forceHTTPS;
+        this.retainedParams = new ArrayList<>();
         if(retainedParams!=null) {
             this.retainedParams.addAll(retainedParams);
         }
+
     }
 
     public String getUrlPattern() {
@@ -48,6 +52,9 @@ public class VideoSiteConfiguration {
 
     public boolean hasParameters() {
         return !retainedParams.isEmpty();
+    }
 
+    public boolean isForceHTTPS() {
+        return forceHTTPS;
     }
 }
