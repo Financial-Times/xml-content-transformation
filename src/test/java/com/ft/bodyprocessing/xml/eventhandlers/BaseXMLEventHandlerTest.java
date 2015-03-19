@@ -56,9 +56,8 @@ public class BaseXMLEventHandlerTest {
     /**
      * This StartElement is not representative of the start elements that are created by our XMLReader.
      * The correct start element is the new one below getCompactStartElement.
-     *
-     * @Deprecated
      */
+    @Deprecated
     protected StartElement getStartElementWithAttributes(String elementName, Map<String,String> attributes) {
         List<Attribute> attributeList = new ArrayList<Attribute>();
         for(String key: attributes.keySet()) {
