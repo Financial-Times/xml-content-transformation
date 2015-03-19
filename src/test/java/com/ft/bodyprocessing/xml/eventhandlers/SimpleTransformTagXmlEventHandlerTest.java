@@ -2,11 +2,12 @@ package com.ft.bodyprocessing.xml.eventhandlers;
 
 import static org.mockito.Mockito.verify;
 
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+
 import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.writer.BodyWriter;
 import com.google.common.collect.ImmutableMap;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartElement;
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(value=MockitoJUnitRunner.class)
 public class SimpleTransformTagXmlEventHandlerTest  extends BaseXMLEventHandlerTest {
 
-	private SimpleTransformTagXmlEventHandler eventHandler;
+	private SimpleTransformTagXmlEventHandlerHandler eventHandler;
 
 	@Mock private BodyWriter      eventWriter;
 	@Mock private XMLEventReader2 mockXmlEventReader;
@@ -25,22 +26,22 @@ public class SimpleTransformTagXmlEventHandlerTest  extends BaseXMLEventHandlerT
 
 	@Before
 	public void setUp() {
-		eventHandler = new SimpleTransformTagXmlEventHandler("span", "class", "underlined");
+		eventHandler = new SimpleTransformTagXmlEventHandlerHandler("span", "class", "underlined");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldRejectEmptyReplacementElement() {
-		new SimpleTransformTagXmlEventHandler("");
+		new SimpleTransformTagXmlEventHandlerHandler("");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldRejectNullReplacementElement() {
-		new SimpleTransformTagXmlEventHandler(null);
+		new SimpleTransformTagXmlEventHandlerHandler(null);
 	}
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorShouldRejectUnevenNumberOfAttributes() {
-        new SimpleTransformTagXmlEventHandler("p", "class");
+        new SimpleTransformTagXmlEventHandlerHandler("p", "class");
     }
 
 	@Test

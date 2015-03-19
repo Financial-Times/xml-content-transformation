@@ -1,5 +1,5 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
-public interface TransformableEvent {
+public interface TransformingEventHandler {
     String getNewElement();
 }

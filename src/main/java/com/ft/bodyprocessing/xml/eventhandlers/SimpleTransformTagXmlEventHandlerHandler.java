@@ -12,12 +12,12 @@ import com.ft.bodyprocessing.writer.BodyWriter;
 import org.apache.commons.lang.StringUtils;
 
 
-public class SimpleTransformTagXmlEventHandler extends BaseXMLEventHandler implements TransformableEvent{
+public class SimpleTransformTagXmlEventHandlerHandler extends BaseXMLEventHandler implements TransformingEventHandler {
 
 	private String              newElement;
 	private Map<String, String> attributesToAdd;
 
-	public SimpleTransformTagXmlEventHandler(String newElement, String... attributesToAdd) {
+	public SimpleTransformTagXmlEventHandlerHandler(String newElement, String... attributesToAdd) {
 		if (StringUtils.isEmpty(newElement)) {
 			throw new IllegalArgumentException("newElement cannot be empty");
 		}
