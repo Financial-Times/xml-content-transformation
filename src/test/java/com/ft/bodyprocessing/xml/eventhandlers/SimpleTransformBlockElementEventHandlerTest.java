@@ -28,14 +28,14 @@ public class SimpleTransformBlockElementEventHandlerTest extends BaseXMLEventHan
     @Mock private BodyWriter mockBodyWriter;
     @Mock private BodyProcessingContext mockBodyProcessingContext;
 
-    private SimpleTransformBlockElementEventHandlerHandler eventHandler;
+    private SimpleTransformBlockElementEventHandler eventHandler;
     private StartElement startElement;
 
     private static String TIMELINE_STR =  "<timeline></timeline>";
 
     @Before
     public void setUp() throws Exception {
-        eventHandler = Mockito.spy(new SimpleTransformBlockElementEventHandlerHandler(mockStAXTransformingBodyProcessor, "changeToMe"));
+        eventHandler = Mockito.spy(new SimpleTransformBlockElementEventHandler(mockStAXTransformingBodyProcessor, "changeToMe"));
         startElement = getCompactStartElement(TIMELINE_STR, "timeline");
 
         doReturn("<timeline-item>Hello</timeline-item>").when(eventHandler).parseRawContent("timeline", mockXmlEventReader);

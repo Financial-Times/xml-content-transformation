@@ -10,14 +10,14 @@ import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.writer.BodyWriter;
 import com.ft.bodyprocessing.xml.StAXTransformingBodyProcessor;
 
-public class SimpleTransformBlockElementEventHandlerHandler extends BaseXMLEventHandler implements TransformingEventHandler {
+public class SimpleTransformBlockElementEventHandler extends BaseXMLEventHandler implements TransformingEventHandler {
 
 
     private StAXTransformingBodyProcessor stAXTransformingBodyProcessor;
     private String replacementElementName;
     private static final String PARAGRAPH_TAG = "p";
 
-    public SimpleTransformBlockElementEventHandlerHandler(StAXTransformingBodyProcessor stAXTransformingBodyProcessor, String replacementElementName) {
+    public SimpleTransformBlockElementEventHandler(StAXTransformingBodyProcessor stAXTransformingBodyProcessor, String replacementElementName) {
         this.stAXTransformingBodyProcessor  =  stAXTransformingBodyProcessor;
         this.replacementElementName = replacementElementName;
     }

@@ -18,7 +18,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 @RunWith(value=MockitoJUnitRunner.class)
 public class SimpleTransformTagXmlEventHandlerTest  extends BaseXMLEventHandlerTest {
 
-	private SimpleTransformTagXmlEventHandlerHandler eventHandler;
+	private SimpleTransformTagXmlEventHandler eventHandler;
 
 	@Mock private BodyWriter      eventWriter;
 	@Mock private XMLEventReader2 mockXmlEventReader;
@@ -26,22 +26,22 @@ public class SimpleTransformTagXmlEventHandlerTest  extends BaseXMLEventHandlerT
 
 	@Before
 	public void setUp() {
-		eventHandler = new SimpleTransformTagXmlEventHandlerHandler("span", "class", "underlined");
+		eventHandler = new SimpleTransformTagXmlEventHandler("span", "class", "underlined");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldRejectEmptyReplacementElement() {
-		new SimpleTransformTagXmlEventHandlerHandler("");
+		new SimpleTransformTagXmlEventHandler("");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void constructorShouldRejectNullReplacementElement() {
-		new SimpleTransformTagXmlEventHandlerHandler(null);
+		new SimpleTransformTagXmlEventHandler(null);
 	}
 
     @Test(expected = IllegalArgumentException.class)
     public void constructorShouldRejectUnevenNumberOfAttributes() {
-        new SimpleTransformTagXmlEventHandlerHandler("p", "class");
+        new SimpleTransformTagXmlEventHandler("p", "class");
     }
 
 	@Test
