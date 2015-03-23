@@ -2,11 +2,12 @@ package com.ft.bodyprocessing.xml.eventhandlers;
 
 import static org.mockito.Mockito.verify;
 
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartElement;
+
 import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.writer.BodyWriter;
 import com.google.common.collect.ImmutableMap;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartElement;
 import org.codehaus.stax2.XMLEventReader2;
 import org.junit.Before;
 import org.junit.Test;

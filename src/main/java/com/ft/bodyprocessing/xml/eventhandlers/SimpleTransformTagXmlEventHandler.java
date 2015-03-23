@@ -1,17 +1,18 @@
 package com.ft.bodyprocessing.xml.eventhandlers;
 
-import com.ft.bodyprocessing.BodyProcessingContext;
-import com.ft.bodyprocessing.writer.BodyWriter;
 import java.util.HashMap;
 import java.util.Map;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+
+import com.ft.bodyprocessing.BodyProcessingContext;
+import com.ft.bodyprocessing.writer.BodyWriter;
 import org.apache.commons.lang.StringUtils;
 
 
-public class SimpleTransformTagXmlEventHandler extends BaseXMLEventHandler {
+public class SimpleTransformTagXmlEventHandler extends BaseXMLEventHandler implements TransformingEventHandler {
 
 	private String              newElement;
 	private Map<String, String> attributesToAdd;
@@ -43,6 +44,7 @@ public class SimpleTransformTagXmlEventHandler extends BaseXMLEventHandler {
 		eventWriter.writeEndTag(newElement);
 	}
 
+    @Override
 	public String getNewElement() {
 		return newElement;
 	}
