@@ -27,7 +27,7 @@ public class TagSoupHtmlBodyProcessor implements BodyProcessor {
 			return "";
 		}
 
-        Document doc = createDocument(bodyHtml);
+        Document doc = createRectifiedDocument(bodyHtml);
         Element body = (Element) doc.getElementsByTagName("body").item(0);
 
 		return Xml.writeToString(body);
@@ -35,7 +35,7 @@ public class TagSoupHtmlBodyProcessor implements BodyProcessor {
 
 
 
-	private Document createDocument(String html) throws BodyProcessingException {
+	private Document createRectifiedDocument(String html) throws BodyProcessingException {
         Parser parser = new Parser();
         try {
             SAX2DOM sax2dom = new SAX2DOM();
@@ -46,12 +46,8 @@ public class TagSoupHtmlBodyProcessor implements BodyProcessor {
             parser.parse(new InputSource(new StringReader(html)));
             return (Document) sax2dom.getDOM();
 
-        } catch (IOException ioe) {
+        } catch (IOException | SAXException | ParserConfigurationException ioe) {
             throw new BodyProcessingException(ioe);
-        } catch (SAXException se){
-            throw new BodyProcessingException(se);
-        } catch (ParserConfigurationException pce) {
-           throw new BodyProcessingException(pce);
         }
     }
 }
