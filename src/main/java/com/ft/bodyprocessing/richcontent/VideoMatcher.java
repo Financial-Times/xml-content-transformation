@@ -50,6 +50,13 @@ public class VideoMatcher {
 
                 for(String param : site.getRetainedParams()) {
                     if(originalParameters.containsKey(param)) {
+                        String embedParamStart = "start";
+                        if(originalParameters.containsKey(embedParamStart)) {
+                            String transformedValueInSeconds = originalParameters.get(embedParamStart) + "s";
+                            originalParameters.remove(embedParamStart);
+                            param = "t";
+                            originalParameters.put(param, transformedValueInSeconds);
+                        }
                         char delimiter = '?';
                         if(url.contains("?")) {
                            delimiter = '&';
