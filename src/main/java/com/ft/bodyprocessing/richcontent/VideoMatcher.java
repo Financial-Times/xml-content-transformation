@@ -39,7 +39,7 @@ public class VideoMatcher {
             String id = pathMatcher.group("id");
             url = String.format(site.getTemplate(),id);
 
-            if(site.hasParameters()) {
+            if(site.hasRetainedParameters()) {
 
                 StringTokenizer queryStringParts = new StringTokenizer(attachment.getUrl(),"?&=");
                 Map<String,String> originalParameters = new HashMap<>();
@@ -50,18 +50,21 @@ public class VideoMatcher {
 
                 for(String param : site.getRetainedParams()) {
                     if(originalParameters.containsKey(param)) {
-                        String embedParamStart = "start";
-                        if(originalParameters.containsKey(embedParamStart)) {
-                            String transformedValueInSeconds = originalParameters.get(embedParamStart) + "s";
-                            originalParameters.remove(embedParamStart);
-                            param = "t";
-                            originalParameters.put(param, transformedValueInSeconds);
+                        String paramValue = originalParameters.get(param);
+                        if(site.hasConvertedParameters()) {
+                            List<ConvertParameters> convertParametersList = site.getConvertParameters();
+                            for(ConvertParameters convertParameters : convertParametersList) {
+                                if(convertParameters.getStartingParameter().equals(param)) {
+                                    param = convertParameters.getConvertedParameter();
+                                    paramValue = String.format("%s" + convertParameters.getConversionTemplate(), paramValue);
+                                }
+                            }
                         }
                         char delimiter = '?';
                         if(url.contains("?")) {
                            delimiter = '&';
                         }
-                        url = url + delimiter + param + "=" + originalParameters.get(param);
+                        url = url + delimiter + param + "=" + paramValue;
                     }
                 }
             }

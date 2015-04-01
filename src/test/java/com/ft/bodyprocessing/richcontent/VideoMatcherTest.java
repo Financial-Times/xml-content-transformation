@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -20,14 +21,21 @@ import org.mockito.Mock;
 public class VideoMatcherTest {
 
     private static final List<String> T = Collections.singletonList("t");
+    private static final List<String> START = Collections.singletonList("start");
     private static final List<String> NONE = Collections.emptyList();
+    private static final String FROM = "start";
+    private static final String TO = "t";
+    private static final String NEW_VALUE = "s";
+    private static final ConvertParameters CONVERTED_PARAMS = new ConvertParameters(FROM, TO, NEW_VALUE);
+    private static final List<ConvertParameters> CONVERTED_PARAMS_LIST = ImmutableList.of(CONVERTED_PARAMS);
+
 
     public static List<VideoSiteConfiguration> DEFAULTS = Arrays.asList(
-            new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true, T, true),
-            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false,T, true),
-            new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, T, true),
-            new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false, NONE, false), /* made false for test */
-            new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false, NONE, false) /* made false for test */
+            new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true, T, null, true),
+            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, START, CONVERTED_PARAMS_LIST, true),
+            new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, T, null, true),
+            new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false, NONE, null, false), /* made false for test */
+            new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false, NONE, null, false) /* made false for test */
     );
 
     private List<VideoSiteConfiguration> videoSiteConfigurationList = DEFAULTS ;
@@ -35,9 +43,29 @@ public class VideoMatcherTest {
     @Mock private VideoSiteConfiguration videoSiteConfiguration;
 
     @Test
-    public void shouldRewriteYoutubeEmbedsAsLinks() {
+         public void shouldRewriteYoutubeEmbedsAsLinks() {
 
         RichContentItem attachment = new RichContentItem("https://www.youtube.com/embed/V8B4CjOkcck","Squirrel is basically Nikki Minoj");
+
+        String result = runMatchAsNormal(attachment);
+
+        assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck"));
+    }
+
+    @Test
+    public void shouldRewriteYoutubeEmbedsAsWatchAndConvertStartParamToT() {
+
+        RichContentItem attachment = new RichContentItem("https://www.youtube.com/embed/V8B4CjOkcck?autoplay=0&start=143","Squirrel is basically Nikki Minoj");
+
+        String result = runMatchAsNormal(attachment);
+
+        assertThat(result, is("https://www.youtube.com/watch?v=V8B4CjOkcck&t=143s"));
+    }
+
+    @Test
+    public void shouldIgnoreTParamFromYoutubeEmbedsWhenTransformedToWatch() {
+
+        RichContentItem attachment = new RichContentItem("https://www.youtube.com/embed/V8B4CjOkcck?t=36s","Squirrel is basically Nikki Minoj");
 
         String result = runMatchAsNormal(attachment);
 
