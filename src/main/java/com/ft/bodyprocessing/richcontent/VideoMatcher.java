@@ -47,32 +47,13 @@ public class VideoMatcher {
                 while (queryStringParts.hasMoreTokens()) {
                     originalParameters.put(queryStringParts.nextToken(), queryStringParts.nextToken());
                 }
-
-                for(String param : site.getRetainedParams()) {
-                    if(originalParameters.containsKey(param)) {
-                        String paramValue = originalParameters.get(param);
-                        char delimiter = '?';
-                        if(url.contains("?")) {
-                           delimiter = '&';
-                        }
-                        url = url + delimiter + param + "=" + paramValue;
-                    }
-                }
-                for(ConvertParameters convertParameters : site.getConvertParameters()) {
-                    String startParam = convertParameters.getStartingParameter();
-                    String paramValue = originalParameters.get(startParam);
-                    if(originalParameters.containsKey(startParam)) {
-                        startParam = convertParameters.getConvertedParameter();
-                        paramValue = String.format("%s" + convertParameters.getConversionTemplate(), paramValue);
-
-                        char delimiter = '?';
-                        if(url.contains("?")) {
-                            delimiter = '&';
-                        }
-                        url = url + delimiter + startParam + "=" + paramValue;
-                    }
+                if(site.hasRetainedParameters()) {
+                    url = rebuildUrl(url, site, originalParameters);
                 }
 
+                if(site.hasConvertParameters()) {
+                    url = rebuildUrlWithConvertedParams(url, site, originalParameters);
+                }
             }
         }
 
@@ -90,6 +71,39 @@ public class VideoMatcher {
         video.setTitle(attachment.getTitle());
 
         return video;
+    }
+
+    private String rebuildUrlWithConvertedParams(String url, VideoSiteConfiguration site, Map<String, String> originalParameters) {
+        for(ConvertParameters convertParameters : site.getConvertParameters()) {
+            String param = convertParameters.getStartingParameter();
+            String paramValue = originalParameters.get(param);
+            if(originalParameters.containsKey(param)) {
+                param = convertParameters.getConvertedParameter();
+                paramValue = String.format("%s" + convertParameters.getConversionTemplate(), paramValue);
+
+                url = appendParameters(url, param, paramValue);
+            }
+        }
+        return url;
+    }
+
+    private String rebuildUrl(String url, VideoSiteConfiguration site, Map<String, String> originalParameters) {
+        for(String param : site.getRetainedParams()) {
+            if(originalParameters.containsKey(param)) {
+                String paramValue = originalParameters.get(param);
+                url = appendParameters(url, param, paramValue);
+            }
+        }
+        return url;
+    }
+
+    private String appendParameters(String url, String param, String paramValue) {
+        char delimiter = '?';
+        if(url.contains("?")) {
+            delimiter = '&';
+        }
+        url = url + delimiter + param + "=" + paramValue;
+        return url;
     }
 
     private Matcher startSearchForURLPattern(String url, VideoSiteConfiguration site) {
