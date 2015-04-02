@@ -21,7 +21,6 @@ import org.mockito.Mock;
 public class VideoMatcherTest {
 
     private static final List<String> T = Collections.singletonList("t");
-    private static final List<String> START = Collections.singletonList("start");
     private static final List<String> NONE = Collections.emptyList();
     private static final String FROM = "start";
     private static final String TO = "t";
@@ -32,7 +31,7 @@ public class VideoMatcherTest {
 
     public static List<VideoSiteConfiguration> DEFAULTS = Arrays.asList(
             new VideoSiteConfiguration("https?://www.youtube.com/watch\\?v=(?<id>[A-Za-z0-9_-]+)", null, true, T, null, true),
-            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, START, CONVERTED_PARAMS_LIST, true),
+            new VideoSiteConfiguration("https?://www.youtube.com/embed/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, NONE, CONVERTED_PARAMS_LIST, true),
             new VideoSiteConfiguration("https?://youtu.be/(?<id>[A-Za-z0-9_-]+)", "https://www.youtube.com/watch?v=%s", false, T, null, true),
             new VideoSiteConfiguration("https?://vimeo.com/[0-9]+", null, false, NONE, null, false), /* made false for test */
             new VideoSiteConfiguration("https?://video.ft.com/[0-9]+/[\\s]?", null, false, NONE, null, false) /* made false for test */

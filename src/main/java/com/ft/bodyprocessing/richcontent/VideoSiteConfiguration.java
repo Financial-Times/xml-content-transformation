@@ -53,14 +53,10 @@ public class VideoSiteConfiguration {
 
     public List<String> getRetainedParams() { return retainedParams; }
 
-    public boolean hasRetainedParameters() {
-        return !retainedParams.isEmpty();
-    }
-
     public List<ConvertParameters> getConvertParameters() { return convertParameters; }
 
-    public boolean hasConvertedParameters() {
-        return !convertParameters.isEmpty();
+    public boolean hasParameters() {
+        return (!retainedParams.isEmpty() || !convertParameters.isEmpty());
     }
 
     public boolean isForceHTTPS() {
