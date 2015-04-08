@@ -75,11 +75,11 @@ public class VideoMatcher {
 
     private String rebuildUrlWithConvertedParams(String url, VideoSiteConfiguration site, Map<String, String> originalParameters) {
         for(ConvertParameters convertParameters : site.getConvertParameters()) {
-            String param = convertParameters.getStartingParameter();
+            String param = convertParameters.getConvertFromParameter();
             String paramValue = originalParameters.get(param);
             if(originalParameters.containsKey(param)) {
-                param = convertParameters.getConvertedParameter();
-                paramValue = String.format("%s" + convertParameters.getConversionTemplate(), paramValue);
+                param = convertParameters.getConvertedToParameter();
+                paramValue = String.format(convertParameters.getConversionTemplate(), paramValue);
 
                 url = appendParameters(url, param, paramValue);
             }
@@ -102,7 +102,8 @@ public class VideoMatcher {
         if(url.contains("?")) {
             delimiter = '&';
         }
-        url = url + delimiter + param + "=" + paramValue;
+        StringBuilder stringBuilder = new StringBuilder();
+        url = stringBuilder.append(url + delimiter + param + "=" + paramValue).toString();
         return url;
     }
 

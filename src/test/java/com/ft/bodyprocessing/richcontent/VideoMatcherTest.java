@@ -24,7 +24,7 @@ public class VideoMatcherTest {
     private static final List<String> NONE = Collections.emptyList();
     private static final String FROM = "start";
     private static final String TO = "t";
-    private static final String NEW_VALUE = "s";
+    private static final String NEW_VALUE = "%ss";
     private static final ConvertParameters CONVERTED_PARAMS = new ConvertParameters(FROM, TO, NEW_VALUE);
     private static final List<ConvertParameters> CONVERTED_PARAMS_LIST = ImmutableList.of(CONVERTED_PARAMS);
 

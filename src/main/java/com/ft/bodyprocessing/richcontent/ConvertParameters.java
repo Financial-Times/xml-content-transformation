@@ -4,21 +4,21 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ConvertParameters {
 
-    private String startingParameter;
-    private String convertedParameter;
+    private String convertFromParameter;
+    private String convertedToParameter;
     private String conversionTemplate;
 
-    public ConvertParameters(@JsonProperty("startingParameter") String startingParameter,
-                             @JsonProperty("convertedParameter") String convertedParameter,
+    public ConvertParameters(@JsonProperty("convertFromParameter") String convertFromParameter,
+                             @JsonProperty("convertedToParameter") String convertedToParameter,
                              @JsonProperty("conversionTemplate") String conversionTemplate) {
-        this.startingParameter = startingParameter;
-        this.convertedParameter = convertedParameter;
+        this.convertFromParameter = convertFromParameter;
+        this.convertedToParameter = convertedToParameter;
         this.conversionTemplate = conversionTemplate;
     }
 
-    public String getStartingParameter() { return startingParameter; }
+    public String getConvertFromParameter() { return convertFromParameter; }
 
-    public String getConvertedParameter() { return convertedParameter; }
+    public String getConvertedToParameter() { return convertedToParameter; }
 
     public String getConversionTemplate() { return conversionTemplate; }
 
