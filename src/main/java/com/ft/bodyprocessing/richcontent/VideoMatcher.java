@@ -47,18 +47,16 @@ public class VideoMatcher {
                 while (queryStringParts.hasMoreTokens()) {
                     originalParameters.put(queryStringParts.nextToken(), queryStringParts.nextToken());
                 }
+                if(site.hasRetainedParameters()) {
+                    url = rebuildUrl(url, site, originalParameters);
+                }
 
-                for(String param : site.getRetainedParams()) {
-                    if(originalParameters.containsKey(param)) {
-                        char delimiter = '?';
-                        if(url.contains("?")) {
-                           delimiter = '&';
-                        }
-                        url = url + delimiter + param + "=" + originalParameters.get(param);
-                    }
+                if(site.hasConvertParameters()) {
+                    url = rebuildUrlWithConvertedParams(url, site, originalParameters);
                 }
             }
         }
+
 
         if(site.isForceHTTPS()) {
             url = url.replace("http://","https://");
@@ -73,6 +71,40 @@ public class VideoMatcher {
         video.setTitle(attachment.getTitle());
 
         return video;
+    }
+
+    private String rebuildUrlWithConvertedParams(String url, VideoSiteConfiguration site, Map<String, String> originalParameters) {
+        for(ConvertParameters convertParameters : site.getConvertParameters()) {
+            String param = convertParameters.getConvertFromParameter();
+            String paramValue = originalParameters.get(param);
+            if(originalParameters.containsKey(param)) {
+                param = convertParameters.getConvertedToParameter();
+                paramValue = String.format(convertParameters.getConversionTemplate(), paramValue);
+
+                url = appendParameters(url, param, paramValue);
+            }
+        }
+        return url;
+    }
+
+    private String rebuildUrl(String url, VideoSiteConfiguration site, Map<String, String> originalParameters) {
+        for(String param : site.getRetainedParams()) {
+            if(originalParameters.containsKey(param)) {
+                String paramValue = originalParameters.get(param);
+                url = appendParameters(url, param, paramValue);
+            }
+        }
+        return url;
+    }
+
+    private String appendParameters(String url, String param, String paramValue) {
+        char delimiter = '?';
+        if(url.contains("?")) {
+            delimiter = '&';
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        url = stringBuilder.append(url).append(delimiter).append(param).append("=").append(paramValue).toString();
+        return url;
     }
 
     private Matcher startSearchForURLPattern(String url, VideoSiteConfiguration site) {
