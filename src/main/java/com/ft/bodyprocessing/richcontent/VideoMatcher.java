@@ -103,7 +103,7 @@ public class VideoMatcher {
             delimiter = '&';
         }
         StringBuilder stringBuilder = new StringBuilder();
-        url = stringBuilder.append(url + delimiter + param + "=" + paramValue).toString();
+        url = stringBuilder.append(url).append(delimiter).append(param).append("=").append(paramValue).toString();
         return url;
     }
 
