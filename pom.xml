@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ft.bodyprocessing</groupId>
 	<artifactId>body-processing</artifactId>
-	<version>0.1.7</version>
+	<version>0.1.8</version>
 	<name>${project.artifactId}</name>
 
 	<properties>
@@ -75,8 +75,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
 					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
+						<source>1.8</source>
+						<target>1.8</target>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -152,7 +152,7 @@
 									<version>[3.0.5,4.0)</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
-									<version>[1.7,1.9)</version>
+									<version>[1.8,1.9)</version>
 								</requireJavaVersion>
 								<requirePluginVersions>
 									<message>Best Practice is to always define versions for maven
