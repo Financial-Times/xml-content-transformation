@@ -11,6 +11,7 @@ import com.ft.bodyprocessing.BodyProcessingContext;
 import com.ft.bodyprocessing.BodyProcessingException;
 
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -37,12 +38,15 @@ public class DOMTransformingBodyProcessorTest {
     
     processor.process(BODY, context);
     
-    ArgumentCaptor<NodeList> captor = ArgumentCaptor.forClass(NodeList.class);
-    verify(handler).handle(captor.capture());
+    ArgumentCaptor<Document> captorDoc = ArgumentCaptor.forClass(Document.class);
+    ArgumentCaptor<NodeList> captorNodes = ArgumentCaptor.forClass(NodeList.class);
+    verify(handler).handle(captorDoc.capture(), captorNodes.capture());
     
-    NodeList actual = captor.getValue();
+    NodeList actual = captorNodes.getValue();
     assertThat(actual.getLength(), equalTo(1));
-    assertThat(actual.item(0).getTextContent(), equalTo("A bar element"));
+    Node firstNode = actual.item(0);
+    assertThat(firstNode.getTextContent(), equalTo("A bar element"));
+    assertThat(firstNode.getOwnerDocument(), equalTo(captorDoc.getValue()));
   }
   
   @Test
@@ -53,20 +57,21 @@ public class DOMTransformingBodyProcessorTest {
     
     processor.process(BODY, context);
     
+    ArgumentCaptor<Document> captorDoc = ArgumentCaptor.forClass(Document.class);
     ArgumentCaptor<NodeList> captor = ArgumentCaptor.forClass(NodeList.class);
-    verify(handler).handle(captor.capture());
+    verify(handler).handle(captorDoc.capture(), captor.capture());
     
     NodeList actual = captor.getValue();
     assertThat(actual.getLength(), equalTo(0));
+    assertThat(captorDoc.getValue(), notNullValue());
   }
   
   @Test
   public void thatXPathHandlerModifiesDocument() {
     DOMTransformingBodyProcessor processor = new DOMTransformingBodyProcessor(
-        Collections.singletonMap("/body/foo/bar", nodes -> {
+        Collections.singletonMap("/body/foo/bar", (doc, nodes) -> {
           Node n = nodes.item(0);
           Node parent = n.getParentNode();
-          Document doc = n.getOwnerDocument();
           
           Element el = doc.createElement("baz");
           el.setTextContent("Modified by handler");

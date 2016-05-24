@@ -59,7 +59,7 @@ public class DOMTransformingBodyProcessor
         for (Map.Entry<String,XPathHandler> en : handlers.entrySet()) {
           String path = en.getKey();
           NodeList nodes = (NodeList)xpath.evaluate(path, document, NODESET);
-          en.getValue().handle(nodes);
+          en.getValue().handle(document, nodes);
         }
         
       } catch (ParserConfigurationException | SAXException | IOException | XPathExpressionException e) {
