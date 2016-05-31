@@ -2,7 +2,10 @@ package com.ft.bodyprocessing.xml.eventhandlers;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.events.Characters;
@@ -14,10 +17,29 @@ import javax.xml.stream.events.XMLEvent;
 
 public class XMLEventHandlerRegistry {
 
+    class NameToHandler {
+
+        private String name;
+        private XMLEventHandler handler;
+
+        public NameToHandler(final String name, final XMLEventHandler handler) {
+            this.name = name;
+            this.handler = handler;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public XMLEventHandler getXmlEventHandler() {
+            return handler;
+        }
+    }
+
 	private XMLEventHandler defaultEventHandler = null;
 	private XMLEventHandler charactersEventHandler = null;
 	private Map<String, XMLEventHandler> endElementEventHandlers = new HashMap<String,XMLEventHandler>();
-	private Map<String, XMLEventHandler> startElementEventHandlers = new HashMap<String,XMLEventHandler>();
+	private List<NameToHandler> startElementEventHandlers = new ArrayList<>();
 	private XMLEventHandler entityReferenceEventHandler;
 	private XMLEventHandler commentsEventHandler;
 	
@@ -30,12 +52,26 @@ public class XMLEventHandlerRegistry {
 	}
 	
 	public XMLEventHandler getEventHandler(StartElement event) {
-		XMLEventHandler eventHandler = startElementEventHandlers.get(event.asStartElement().getName().getLocalPart().toLowerCase());
-		if (eventHandler == null) {
-			eventHandler = (XMLEventHandler) defaultEventHandler;
-		}
-		return eventHandler;
+        for (final NameToHandler nameToHandler : startElementEventHandlers) {
+            if (nameToHandler.getName().equals(event.asStartElement().getName().getLocalPart().toLowerCase())) {
+                return nameToHandler.getXmlEventHandler();
+            }
+        }
+        return defaultEventHandler;
 	}
+
+    public List<XMLEventHandler> getEventHandlers(StartElement event) {
+        final List<XMLEventHandler> matchingHandlers = new ArrayList<>();
+        for (final NameToHandler nameToHandler : startElementEventHandlers) {
+            if (nameToHandler.getName().equals(event.asStartElement().getName().getLocalPart().toLowerCase())) {
+                matchingHandlers.add(nameToHandler.getXmlEventHandler());
+            }
+        }
+        if (!matchingHandlers.isEmpty()) {
+            return matchingHandlers;
+        }
+        return Collections.singletonList(defaultEventHandler);
+    }
 	
 	public XMLEventHandler getEventHandler(EndElement event) {
 		XMLEventHandler eventHandler = endElementEventHandlers.get(event.asEndElement().getName().getLocalPart().toLowerCase());
@@ -85,8 +121,8 @@ public class XMLEventHandlerRegistry {
 		notNull(names, "names cannot be null");
 		notEmpty(names, "names cannot be empty");
 		
-		for(String name: names) {
-			startElementEventHandlers.put(name.toLowerCase(), startElementEventHandler);
+		for (String name: names) {
+			startElementEventHandlers.add(new NameToHandler(name.toLowerCase(), startElementEventHandler));
 		}
 	}
 
@@ -117,7 +153,7 @@ public class XMLEventHandlerRegistry {
 		notNull(names, "names cannot be null");
 		notEmpty(names, "names cannot be empty");
 		for(String name: names) {
-			startElementEventHandlers.put(name.toLowerCase(), eventHandler);
+			startElementEventHandlers.add(new NameToHandler(name.toLowerCase(), eventHandler));
 			endElementEventHandlers.put(name.toLowerCase(), eventHandler);
 		}
 		

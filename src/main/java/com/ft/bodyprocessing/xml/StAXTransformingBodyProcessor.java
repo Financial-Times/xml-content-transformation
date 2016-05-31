@@ -20,6 +20,8 @@ import com.ft.bodyprocessing.xml.eventhandlers.XMLEventHandlerRegistry;
 import org.codehaus.stax2.XMLInputFactory2;
 import org.codehaus.stax2.XMLOutputFactory2;
 
+import java.util.List;
+
 
 public class StAXTransformingBodyProcessor implements BodyProcessor {
 
@@ -79,10 +81,12 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
     }
 
     private void handleEvent(XMLEvent event, XMLEventReader xmlEventReader, BodyProcessingContext bodyProcessingContext, BodyWriter bodyWriter) throws XMLStreamException {
-        XMLEventHandler eventHandler = null;
+        XMLEventHandler eventHandler;
         if (event.isStartElement()) {
-            eventHandler = eventHandlerRegistry.getEventHandler(event.asStartElement());
-            eventHandler.handleStartElementEvent(event.asStartElement(), xmlEventReader, bodyWriter, bodyProcessingContext);
+            List<XMLEventHandler> eventHandlers = eventHandlerRegistry.getEventHandlers(event.asStartElement());
+            for (final XMLEventHandler anEventHandler : eventHandlers) {
+                anEventHandler.handleStartElementEvent(event.asStartElement(), xmlEventReader, bodyWriter, bodyProcessingContext);
+            }
         } else if (event.isEndElement()) {
             eventHandler = eventHandlerRegistry.getEventHandler(event.asEndElement());
             eventHandler.handleEndElementEvent(event.asEndElement(), xmlEventReader, bodyWriter);
