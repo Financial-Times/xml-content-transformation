@@ -88,8 +88,10 @@ public class StAXTransformingBodyProcessor implements BodyProcessor {
                 anEventHandler.handleStartElementEvent(event.asStartElement(), xmlEventReader, bodyWriter, bodyProcessingContext);
             }
         } else if (event.isEndElement()) {
-            eventHandler = eventHandlerRegistry.getEventHandler(event.asEndElement());
-            eventHandler.handleEndElementEvent(event.asEndElement(), xmlEventReader, bodyWriter);
+            List<XMLEventHandler> eventHandlers = eventHandlerRegistry.getEventHandlers(event.asStartElement());
+            for (final XMLEventHandler anEventHandler : eventHandlers) {
+                anEventHandler.handleEndElementEvent(event.asEndElement(), xmlEventReader, bodyWriter);
+            }
         } else if (event.isCharacters()) {
             eventHandler = eventHandlerRegistry.getEventHandler(event.asCharacters());
             eventHandler.handleCharactersEvent(event.asCharacters(), xmlEventReader, bodyWriter);

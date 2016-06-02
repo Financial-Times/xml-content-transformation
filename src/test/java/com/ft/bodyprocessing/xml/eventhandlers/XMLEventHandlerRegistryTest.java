@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.util.List;
+
 
 @RunWith(value=MockitoJUnitRunner.class)
 public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
@@ -15,7 +17,8 @@ public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
 	private XMLEventHandlerRegistry eventHandlerRegistry;
 	
 	@Mock private XMLEventHandler mockXMLEventHandler;
-	
+	@Mock private XMLEventHandler mockXMLEventHandler2;
+
 	@Before
 	public void setup() {
 		eventHandlerRegistry = new XMLEventHandlerRegistry();
@@ -26,6 +29,16 @@ public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
 		eventHandlerRegistry.registerStartElementEventHandler(mockXMLEventHandler, "a");
 		assertEquals(eventHandlerRegistry.getEventHandler(getStartElement("a")), mockXMLEventHandler);
 	}
+
+    @Test
+    public void startElementEventHandlersRegisteredAreReturned() {
+        eventHandlerRegistry.registerEndElementEventHandler(mockXMLEventHandler, "a");
+        eventHandlerRegistry.registerEndElementEventHandler(mockXMLEventHandler2, "a");
+        final List<XMLEventHandler> l =  eventHandlerRegistry.getEventHandlers(getEndElement("a"));
+        assertEquals(2, l.size());
+        assertEquals(l.get(0), mockXMLEventHandler);
+        assertEquals(l.get(1), mockXMLEventHandler2);
+    }
 	
 	@Test
 	public void startElementEventHandlerRegisteredIsReturnedCaseIsIgnored() {
@@ -55,6 +68,16 @@ public class XMLEventHandlerRegistryTest extends BaseXMLEventHandlerTest {
 		eventHandlerRegistry.registerEndElementEventHandler(mockXMLEventHandler, "a");
 		assertEquals(eventHandlerRegistry.getEventHandler(getEndElement("a")), mockXMLEventHandler);
 	}
+
+    @Test
+    public void endElementEventHandlersRegisteredAreReturned() {
+        eventHandlerRegistry.registerEndElementEventHandler(mockXMLEventHandler, "a");
+        eventHandlerRegistry.registerEndElementEventHandler(mockXMLEventHandler2, "a");
+        final List<XMLEventHandler> l =  eventHandlerRegistry.getEventHandlers(getEndElement("a"));
+        assertEquals(2, l.size());
+        assertEquals(l.get(0), mockXMLEventHandler);
+        assertEquals(l.get(1), mockXMLEventHandler2);
+    }
 	
 	@Test
 	public void endElementEventHandlerRegisteredIsReturnedCaseIsIgnored() {
