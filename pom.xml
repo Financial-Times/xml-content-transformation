@@ -20,52 +20,18 @@
 		<woodstox.version>4.2.0</woodstox.version>
 	</properties>
 
-    <repositories>
-        <repository>
-            <id>ft-pipeline-sandbox</id>
-            <url>http://anthill.svc.ft.com:8081/nexus/content/repositories/pipeline-sandbox/</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>ft-snapshots</id>
-            <url>http://anthill.svc.ft.com:8081/nexus/content/groups/public-snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-        <repository>
-            <id>ft-releases</id>
-            <url>http://anthill.svc.ft.com:8081/nexus/content/groups/public</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>Internal Releases</name>
-            <url>http://anthill.svc.ft.com:8081/nexus/content/repositories/releases</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <uniqueVersion>true</uniqueVersion>
-            <url>http://anthill.svc.ft.com:8081/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+     <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>Internal Releases</name>
+      <url>https://nexus.in.ft.com/repository/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <uniqueVersion>true</uniqueVersion>
+      <url>https://nexus.in.ft.com/repository/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
 	<build>
 		<pluginManagement>
